@@ -69,8 +69,8 @@
     }
     .tagline { font-size: 18px; color: var(--text-sec); font-weight: 400; margin-bottom: 16px; }
     .version-badge {
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--blue);
-      background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.15);
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--green);
+      background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.15);
       padding: 5px 16px; border-radius: 6px; display: inline-block;
       letter-spacing: 0.5px; font-weight: 600;
     }
@@ -130,11 +130,11 @@
     /* ═══════ HIGHLIGHTS ═══════ */
     .highlights {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
-      padding: 32px; margin-bottom: 48px;
+      padding: 32px; margin-bottom: 24px;
     }
     .highlights-title {
       font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
-      color: var(--purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
+      color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
     }
     .highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .highlight-item {
@@ -145,6 +145,33 @@
     .highlight-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
     .highlight-text { font-size: 13px; color: var(--text-sec); line-height: 1.5; }
     .highlight-text strong { color: var(--text); }
+
+    /* ═══════ WHATS NEW ═══════ */
+    .whats-new {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 32px; margin-bottom: 48px;
+    }
+    .whats-new-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+      color: var(--amber); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .change-list { list-style: none; }
+    .change-list li {
+      padding: 10px 14px; border-radius: 10px;
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
+      font-size: 13px; color: var(--text-sec); line-height: 1.5;
+      margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .change-list li:last-child { margin-bottom: 0; }
+    .change-list .tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
+      padding: 2px 8px; border-radius: 4px; flex-shrink: 0; margin-top: 3px;
+      letter-spacing: 0.5px;
+    }
+    .tag-new { background: rgba(52,211,153,0.12); color: var(--green); }
+    .tag-fix { background: rgba(248,113,113,0.12); color: var(--red); }
+    .tag-perf { background: rgba(56,189,248,0.12); color: var(--blue); }
+    .tag-cost { background: rgba(251,191,36,0.12); color: var(--amber); }
 
     /* ═══════ FOOTER ═══════ */
     .footer { text-align: center; }
@@ -174,7 +201,7 @@
       .card-title { font-size: 20px; }
       .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
       .highlight-grid { grid-template-columns: 1fr; }
-      .highlights { padding: 24px 20px; }
+      .highlights, .whats-new { padding: 24px 20px; }
     }
     @media (max-width: 480px) {
       .hero h1 { font-size: 28px; }
@@ -186,6 +213,7 @@
       .stat-val { font-size: 20px; }
       .card-desc { font-size: 13px; }
       .footer-legal { padding: 18px 16px; font-size: 9px; }
+      .change-list li { flex-direction: column; gap: 6px; }
     }
   </style>
 </head>
@@ -205,7 +233,7 @@
     </div>
     <h1>Nexus Investing</h1>
     <div class="tagline">AI-Powered Autonomous Trading System</div>
-    <div class="version-badge">V96.1 &bull; PREMIUM SELLING ENGINE</div>
+    <div class="version-badge">V98.1 &bull; LIVE IRON CONDOR EXECUTION</div>
   </div>
 
   <!-- ═══════ DOCUMENT CARDS ═══════ -->
@@ -214,10 +242,10 @@
       <span class="card-icon">&#128202;</span>
       <div class="card-label">SYSTEM OVERVIEW</div>
       <div class="card-title">System Debrief</div>
-      <div class="card-desc">Visual deep-dive into the two-lane architecture, 8-agent AI council, APEX engine, regime detection, risk profiles, and V96.1 premium selling strategies.</div>
+      <div class="card-desc">Visual deep-dive into the two-lane architecture, 8-agent AI council, APEX engine, live iron condor execution, walk-forward optimization, and IBKR TWS integration.</div>
       <div class="card-meta">
         <span>&#9889; Interactive</span>
-        <span>&#9201; 10 min</span>
+        <span>&#9201; 12 min</span>
       </div>
       <div class="card-arrow">&rarr;</div>
     </a>
@@ -225,9 +253,9 @@
       <span class="card-icon">&#128218;</span>
       <div class="card-label">TECHNICAL REFERENCE</div>
       <div class="card-title">User Manual</div>
-      <div class="card-desc">Complete 200+ page technical reference &mdash; 33 chapters, 7 appendices, installation guides, configuration samples, code blocks, and full API documentation.</div>
+      <div class="card-desc">Complete 300+ page technical reference &mdash; 35 chapters, 7 appendices, multi-leg order mechanics, walk-forward validation, IBKR broker adapter, and full API documentation.</div>
       <div class="card-meta">
-        <span>&#128196; 200+ pages</span>
+        <span>&#128196; 300+ pages</span>
         <span>&#9201; Full guide</span>
       </div>
       <div class="card-arrow">&rarr;</div>
@@ -258,32 +286,58 @@
     </div>
   </div>
 
-  <!-- ═══════ HIGHLIGHTS ═══════ -->
+  <!-- ═══════ V98.1 HIGHLIGHTS ═══════ -->
   <div class="highlights">
-    <div class="highlights-title">V96.1 Highlights</div>
+    <div class="highlights-title">V98.1 Highlights</div>
     <div class="highlight-grid">
       <div class="highlight-item">
         <span class="highlight-icon">&#128176;</span>
-        <div class="highlight-text"><strong>Iron Condors</strong> &mdash; +$10,444 profit, 90.1% win rate. Sell OTM spreads on SPY/QQQ, profit when price stays in range.</div>
+        <div class="highlight-text"><strong>Live Iron Condor Execution</strong> &mdash; Alpaca multi-leg orders with automated 4-leg entry/exit. $728 credit received on first live session (SPY + QQQ).</div>
       </div>
       <div class="highlight-item">
-        <span class="highlight-icon">&#128184;</span>
-        <div class="highlight-text"><strong>Credit Spreads</strong> &mdash; +$5,457 profit, 100% win rate. Directional premium selling with regime-adaptive positioning.</div>
+        <span class="highlight-icon">&#128202;</span>
+        <div class="highlight-text"><strong>Walk-Forward Optimization</strong> &mdash; +181% P&amp;L improvement via optimized delta (0.25), wing width (10pt), and Mon/Wed-only trading schedule.</div>
       </div>
       <div class="highlight-item">
         <span class="highlight-icon">&#129504;</span>
-        <div class="highlight-text"><strong>8-Agent AI Council</strong> &mdash; GPT-4o, Claude Opus 4.5, Gemini 2.5 Pro, DeepSeek R1 debating every trade decision.</div>
+        <div class="highlight-text"><strong>IBKR TWS Broker</strong> &mdash; New IBKRTwsBroker adapter via ib_insync for Interactive Brokers Gateway. Real positions, real P&amp;L sync.</div>
+      </div>
+      <div class="highlight-item">
+        <span class="highlight-icon">&#128184;</span>
+        <div class="highlight-text"><strong>Credit Spreads</strong> &mdash; +$5,457 profit, 100% win rate. SMA-based directional premium selling with regime-adaptive positioning.</div>
       </div>
       <div class="highlight-item">
         <span class="highlight-icon">&#128737;</span>
-        <div class="highlight-text"><strong>Opus 4.6 Auditor</strong> &mdash; 3-tier command chain validates every position with Captain &rarr; 1st Officer &rarr; Gatekeeper oversight.</div>
+        <div class="highlight-text"><strong>Trailing Stop Fix</strong> &mdash; Backtest-proven 0.5R activation / 0.5 ATR distance now correctly applied. Winners like RGTI get room to breathe.</div>
+      </div>
+      <div class="highlight-item">
+        <span class="highlight-icon">&#128181;</span>
+        <div class="highlight-text"><strong>Opus Auditor Removed</strong> &mdash; $374/year savings. The automated LLM monitor had -100% ROI with 0 opportunities found. Replaced by manual oversight.</div>
       </div>
     </div>
   </div>
 
+  <!-- ═══════ WHAT'S NEW CHANGELOG ═══════ -->
+  <div class="whats-new">
+    <div class="whats-new-title">What Changed Since V96.1</div>
+    <ul class="change-list">
+      <li><span class="tag tag-new">NEW</span> <span>Alpaca multi-leg order integration for 4-leg Iron Condor entry/exit with OCC symbol format</span></li>
+      <li><span class="tag tag-new">NEW</span> <span>IBKRTwsBroker adapter &mdash; ib_insync TWS socket API for Interactive Brokers Gateway on port 4002</span></li>
+      <li><span class="tag tag-new">NEW</span> <span>Fully automated position management: profit targets, per-side stops, time stops, and hard exits</span></li>
+      <li><span class="tag tag-perf">PERF</span> <span>Walk-forward optimized IC parameters: delta 0.25, wing 10pt, DTE 7, Mon/Wed only &mdash; +181% improvement</span></li>
+      <li><span class="tag tag-perf">PERF</span> <span>Delta range widened 0.24&ndash;0.29 and spread tolerance relaxed to 20% for better option fills</span></li>
+      <li><span class="tag tag-fix">FIX</span> <span>Trailing stop config parameter names corrected &mdash; 0.5R activation / 0.5 ATR distance now applied correctly</span></li>
+      <li><span class="tag tag-fix">FIX</span> <span>IC exit orders now actually placed via broker (critical bug: exits were calculated but never submitted)</span></li>
+      <li><span class="tag tag-fix">FIX</span> <span>Aggressive profile missing execution_service parameter for PremiumSelling &mdash; IC orders now execute</span></li>
+      <li><span class="tag tag-fix">FIX</span> <span>Asyncio event loop fix for Streamlit ScriptRunner and autopilot threads (ib_insync compatibility)</span></li>
+      <li><span class="tag tag-cost">COST</span> <span>Opus 4.6 Auditor removed &mdash; $31.20/month savings with 0 detected opportunities</span></li>
+      <li><span class="tag tag-fix">FIX</span> <span>V94 dead trade time stop disabled for stocks (kept for 0DTE options where theta burn is critical)</span></li>
+    </ul>
+  </div>
+
   <!-- ═══════ FOOTER ═══════ -->
   <div class="footer">
-    <div class="footer-brand">Nexus Investing &bull; V96.1</div>
+    <div class="footer-brand">Nexus Investing &bull; V98.1</div>
     <div class="footer-links">
       <a href="mailto:lokindergill@gmail.com">lokindergill@gmail.com</a>
       <span class="footer-divider">|</span>
