@@ -1,1629 +1,1283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus V98.1 - System Debrief</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
-    <style>
-        /* CSS Variables - Design System */
-        :root {
-            --bg-primary: #06080d;
-            --bg-card: #0f1420;
-            --bg-secondary: #1a2342;
-            --accent-blue: #38bdf8;
-            --accent-green: #34d399;
-            --accent-purple: #a78bfa;
-            --accent-orange: #f97316;
-            --accent-red: #ef4444;
-            --text-primary: #f5f5f5;
-            --text-secondary: #a3a3a3;
-            --border-color: #1e2d42;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Typography */
-        h1, h2, h3, h4 {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            letter-spacing: -0.02em;
-            margin-bottom: 1rem;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            letter-spacing: -0.01em;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-blue);
-        }
-
-        p {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        code {
-            font-family: 'JetBrains Mono', monospace;
-            background: var(--bg-secondary);
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.9rem;
-            color: var(--accent-green);
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Animations */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(56, 189, 248, 0.4);
-            }
-        }
-
-        @keyframes orbFloat {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(20px, -20px) rotate(90deg);
-            }
-            50% {
-                transform: translate(0, -40px) rotate(180deg);
-            }
-            75% {
-                transform: translate(-20px, -20px) rotate(270deg);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        section {
-            margin-bottom: 5rem;
-            animation: fadeUp 0.8s ease-out;
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            top: -200px;
-            right: -200px;
-            animation: orbFloat 8s infinite ease-in-out;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-            border-radius: 1rem;
-            font-size: 3rem;
-            animation: glow 3s ease-in-out infinite;
-        }
-
-        .hero h1 {
-            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-green) 50%, var(--accent-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-        }
-
-        .tagline {
-            font-size: 1.25rem;
-            color: var(--accent-green);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .stat-card:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        /* Two-Lane Architecture */
-        .lanes-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .lane {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 1.25rem;
-            padding: 2.5rem;
-            transition: var(--transition);
-        }
-
-        .lane:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
-        }
-
-        .lane h3 {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .lane-icon {
-            font-size: 1.8rem;
-        }
-
-        .lane-item {
-            margin-bottom: 1rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .lane-item::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: var(--accent-green);
-        }
-
-        /* Grid Sections */
-        .grid-2col {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .grid-3col {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .grid-4col {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 2rem;
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .card h4 {
-            font-size: 1.2rem;
-            color: var(--accent-blue);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card p {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Icon Styles */
-        .icon {
-            font-size: 1.5rem;
-            display: inline-block;
-        }
-
-        /* Strategy Chip */
-        .strategy-chip {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--accent-green);
-        }
-
-        /* Performance Table */
-        .performance-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            overflow-x: auto;
-            display: block;
-        }
-
-        .performance-table thead {
-            background: var(--bg-secondary);
-        }
-
-        .performance-table th {
-            padding: 1rem;
-            text-align: left;
-            color: var(--accent-blue);
-            font-weight: 600;
-            border-bottom: 2px solid var(--border-color);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-        }
-
-        .performance-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-        }
-
-        .performance-table tbody tr:hover {
-            background: var(--bg-secondary);
-        }
-
-        .positive {
-            color: var(--accent-green);
-        }
-
-        .negative {
-            color: var(--accent-red);
-        }
-
-        /* Tech Stack Chips */
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .tech-chip {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 0.75rem 1.25rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--accent-blue);
-            transition: var(--transition);
-            cursor: default;
-        }
-
-        .tech-chip:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* Feature Comparison */
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .comparison-col h4 {
-            color: var(--accent-blue);
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .comparison-item {
-            margin-bottom: 1rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            gap: 0.75rem;
-        }
-
-        .comparison-item .icon {
-            color: var(--accent-green);
-            font-weight: bold;
-        }
-
-        /* Section Divider */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-            margin: 4rem 0;
-        }
-
-        /* Flow Pipeline */
-        .pipeline {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            align-items: center;
-        }
-
-        .pipeline-step {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            text-align: center;
-            flex: 1;
-            min-width: 150px;
-            max-width: 200px;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .pipeline-step:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
-        }
-
-        .pipeline-step::after {
-            content: '→';
-            position: absolute;
-            right: -2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--accent-green);
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .pipeline-step:last-child::after {
-            display: none;
-        }
-
-        .pipeline-step h4 {
-            font-size: 0.95rem;
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .pipeline-step p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        /* Results Box */
-        .results-box {
-            background: linear-gradient(135deg, rgba(52, 211, 153, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
-            border: 2px solid var(--accent-green);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .results-box h4 {
-            color: var(--accent-green);
-            margin-bottom: 1rem;
-        }
-
-        .result-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .result-item {
-            background: var(--bg-secondary);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border-left: 3px solid var(--accent-green);
-        }
-
-        .result-item .label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-        }
-
-        .result-item .value {
-            font-size: 1.25rem;
-            color: var(--accent-green);
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Risk Profile Section */
-        .risk-profiles {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .risk-card {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .risk-card.conservative {
-            border-color: var(--accent-blue);
-        }
-
-        .risk-card.balanced {
-            border-color: var(--accent-purple);
-        }
-
-        .risk-card.aggressive {
-            border-color: var(--accent-orange);
-        }
-
-        .risk-card.hedge {
-            border-color: var(--accent-red);
-        }
-
-        .risk-card:hover {
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .risk-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .risk-stat {
-            margin-bottom: 0.75rem;
-            font-size: 0.9rem;
-        }
-
-        .risk-stat .label {
-            color: var(--text-secondary);
-        }
-
-        .risk-stat .value {
-            color: var(--accent-green);
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border-color);
-            padding: 3rem 2rem;
-            text-align: center;
-            margin-top: 5rem;
-            background: var(--bg-secondary);
-            border-radius: 1rem 1rem 0 0;
-        }
-
-        footer p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .legal {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 1rem;
-            line-height: 1.8;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 1.5rem;
-            }
-
-            .hero {
-                padding: 3rem 1.5rem;
-            }
-
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .pipeline {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .pipeline-step::after {
-                display: none;
-            }
-        }
-
-        @media (max-width: 640px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-
-            h3 {
-                font-size: 1.2rem;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .hero {
-                padding: 2rem 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .hero h1 {
-                margin-bottom: 0.75rem;
-            }
-
-            .tagline {
-                font-size: 1rem;
-            }
-
-            .hero-logo {
-                width: 60px;
-                height: 60px;
-                font-size: 2.5rem;
-                margin: 0 auto 1.5rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .stat-value {
-                font-size: 2rem;
-            }
-
-            .lanes-container {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .lane {
-                padding: 1.5rem;
-            }
-
-            .grid-2col,
-            .grid-3col,
-            .grid-4col {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .card {
-                padding: 1.5rem;
-            }
-
-            .result-row {
-                grid-template-columns: 1fr;
-            }
-
-            .performance-table {
-                font-size: 0.85rem;
-            }
-
-            .performance-table th,
-            .performance-table td {
-                padding: 0.75rem 0.5rem;
-            }
-
-            .tech-stack {
-                gap: 0.75rem;
-            }
-
-            .tech-chip {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-            }
-
-            .section-divider {
-                margin: 2rem 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            h2 {
-                font-size: 1.25rem;
-                margin-bottom: 1rem;
-            }
-
-            h3 {
-                font-size: 1.05rem;
-            }
-
-            body {
-                font-size: 0.9rem;
-            }
-
-            .container {
-                padding: 0.75rem;
-            }
-
-            .hero {
-                padding: 1.5rem 1rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .hero-logo {
-                width: 50px;
-                height: 50px;
-                font-size: 2rem;
-                margin-bottom: 1rem;
-            }
-
-            .tagline {
-                font-size: 0.95rem;
-            }
-
-            .subtitle {
-                font-size: 0.9rem;
-            }
-
-            .stat-value {
-                font-size: 1.5rem;
-            }
-
-            .stat-label {
-                font-size: 0.8rem;
-            }
-
-            .lane-icon {
-                font-size: 1.5rem;
-            }
-
-            .card h4 {
-                font-size: 1rem;
-            }
-
-            .card p {
-                font-size: 0.9rem;
-            }
-
-            .result-item {
-                padding: 0.75rem;
-            }
-
-            .result-item .value {
-                font-size: 1.1rem;
-            }
-
-            .tech-chip {
-                padding: 0.4rem 0.75rem;
-                font-size: 0.75rem;
-            }
-
-            footer {
-                padding: 2rem 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Investing — System Debrief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #06080d;
+      --bg-secondary: #0c1017;
+      --bg-card: #0f1420;
+      --bg-card-hover: #141a28;
+      --border: rgba(255,255,255,0.06);
+      --border-glow: rgba(56,189,248,0.15);
+      --text-primary: #e8edf5;
+      --text-secondary: #7a8599;
+      --text-muted: #4a5568;
+      --accent-blue: #38bdf8;
+      --accent-cyan: #22d3ee;
+      --accent-green: #34d399;
+      --accent-red: #f87171;
+      --accent-amber: #fbbf24;
+      --accent-purple: #a78bfa;
+      --accent-pink: #f472b6;
+      --gradient-blue: linear-gradient(135deg, #38bdf8, #818cf8);
+      --gradient-green: linear-gradient(135deg, #34d399, #22d3ee);
+      --gradient-red: linear-gradient(135deg, #f87171, #fb923c);
+      --gradient-purple: linear-gradient(135deg, #a78bfa, #f472b6);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Outfit', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(56,189,248,0.05), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(167,139,250,0.04), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ═══════════ ANIMATIONS ═══════════ */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes countUp { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(56,189,248,0.15); }
+      50% { border-color: rgba(56,189,248,0.35); }
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.02); }
+    }
+
+    .fade-up { animation: fadeUp 0.8s ease-out both; }
+    .fade-up-1 { animation-delay: 0.1s; }
+    .fade-up-2 { animation-delay: 0.2s; }
+    .fade-up-3 { animation-delay: 0.3s; }
+    .fade-up-4 { animation-delay: 0.4s; }
+    .fade-up-5 { animation-delay: 0.5s; }
+    .fade-up-6 { animation-delay: 0.6s; }
+
+    /* ═══════════ HERO ═══════════ */
+    .hero {
+      padding: 48px 0 60px;
+      position: relative;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .brand-name {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: var(--text-primary);
+    }
+    .brand-divider {
+      font-size: 32px;
+      color: var(--text-muted);
+      font-weight: 300;
+      margin: 0 2px;
+    }
+    .brand-tagline {
+      font-size: 20px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .hero-sub {
+      font-size: 20px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 100%;
+      margin: 0 auto 48px;
+      line-height: 1.5;
+    }
+    .hero-sub strong { color: var(--accent-blue); font-weight: 600; }
+
+    /* ═══════════ STAT CARDS ═══════════ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 80px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 14px;
+      text-align: center;
+      transition: all 0.3s ease;
+      animation: fadeUp 0.6s ease-out both;
+    }
+    .stat-card:hover {
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .stat-value {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+      animation: countUp 0.8s ease-out both;
+    }
+    .stat-value.blue { color: var(--accent-blue); }
+    .stat-value.green { color: var(--accent-green); }
+    .stat-value.purple { color: var(--accent-purple); }
+    .stat-value.amber { color: var(--accent-amber); }
+    .stat-value.cyan { color: var(--accent-cyan); }
+    .stat-value.pink { color: var(--accent-pink); }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* ═══════════ SECTIONS ═══════════ */
+    .section { margin-bottom: 80px; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 100%;
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    /* ═══════════ ARCHITECTURE ═══════════ */
+    .arch-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .lane-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .lane-card:hover { border-color: var(--border-glow); }
+    .lane-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .lane-card.fast::before { background: var(--gradient-red); }
+    .lane-card.strategic::before { background: var(--gradient-blue); }
+    .lane-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .lane-card.fast .lane-tag { background: rgba(248,113,113,0.1); color: var(--accent-red); }
+    .lane-card.strategic .lane-tag { background: rgba(56,189,248,0.1); color: var(--accent-blue); }
+    .lane-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .lane-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+    .lane-profiles { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .profile-pill {
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .profile-pill.apex { border-color: rgba(244,114,182,0.3); color: var(--accent-pink); }
+    .profile-pill.aggressive { border-color: rgba(248,113,113,0.3); color: var(--accent-red); }
+    .profile-pill.pdh { border-color: rgba(251,191,36,0.3); color: var(--accent-amber); }
+    .profile-pill.ross { border-color: rgba(34,211,238,0.3); color: var(--accent-cyan); }
+    .profile-pill.moderate { border-color: rgba(251,191,36,0.3); color: var(--accent-amber); }
+    .profile-pill.conservative { border-color: rgba(52,211,153,0.3); color: var(--accent-green); }
+    .lane-features { list-style: none; }
+    .lane-features li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .lane-features li:last-child { border-bottom: none; }
+    .lane-features .icon { font-size: 14px; width: 20px; text-align: center; }
+
+    /* ═══════════ AI COUNCIL ═══════════ */
+    .council-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .agent-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 16px;
+      text-align: center;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .agent-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+    }
+    .agent-icon {
+      width: 40px;
+      height: 40px;
+      display: block;
+      margin: 0 auto 10px auto;
+      animation: orbFloat 4s ease-in-out infinite;
+      border-radius: 8px;
+    }
+    .agent-card:nth-child(2) .agent-icon { animation-delay: 0.5s; }
+    .agent-card:nth-child(3) .agent-icon { animation-delay: 1s; }
+    .agent-card:nth-child(4) .agent-icon { animation-delay: 1.5s; }
+    .agent-card:nth-child(5) .agent-icon { animation-delay: 2s; }
+    .agent-card:nth-child(6) .agent-icon { animation-delay: 2.5s; }
+    .agent-card:nth-child(7) .agent-icon { animation-delay: 3s; }
+    .agent-card:nth-child(8) .agent-icon { animation-delay: 3.5s; }
+    .agent-name { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+    .agent-model {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 3px 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .agent-role { font-size: 11px; color: var(--text-secondary); }
+
+    /* ═══════════ PROFILE CARDS (6 profiles) ═══════════ */
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 22px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .profile-card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .profile-card.p-apex::before { background: var(--gradient-purple); }
+    .profile-card.p-aggressive::before { background: var(--gradient-red); }
+    .profile-card.p-pdh::before { background: linear-gradient(135deg, #fbbf24, #fb923c); }
+    .profile-card.p-ross::before { background: linear-gradient(135deg, #22d3ee, #38bdf8); }
+    .profile-card.p-moderate::before { background: linear-gradient(135deg, #818cf8, #a78bfa); }
+    .profile-card.p-conservative::before { background: var(--gradient-green); }
+    .profile-emoji { font-size: 28px; margin-bottom: 12px; display: block; }
+    .profile-name { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+    .profile-style { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+    .profile-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .pm-value { font-size: 16px; font-weight: 700; letter-spacing: -0.5px; }
+    .pm-label { font-size: 11px; color: var(--text-muted); }
+    .profile-card.p-apex .pm-value { color: var(--accent-purple); }
+    .profile-card.p-aggressive .pm-value { color: var(--accent-red); }
+    .profile-card.p-pdh .pm-value { color: var(--accent-amber); }
+    .profile-card.p-ross .pm-value { color: var(--accent-cyan); }
+    .profile-card.p-moderate .pm-value { color: var(--accent-purple); }
+    .profile-card.p-conservative .pm-value { color: var(--accent-green); }
+
+    /* ═══════════ APEX ENGINE ═══════════ */
+    .apex-hero {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .apex-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gradient-purple);
+    }
+    .apex-hero::after {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .apex-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .apex-title-group h3 { font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+    .apex-title-group p { color: var(--text-secondary); font-size: 15px; }
+    .apex-badge {
+      padding: 6px 16px;
+      background: rgba(167,139,250,0.1);
+      border: 1px solid rgba(167,139,250,0.25);
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-purple);
+    }
+    .strategies-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .strategy-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 18px;
+      transition: all 0.3s ease;
+    }
+    .strategy-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+    .strategy-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .strategy-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 12px; }
+    .strategy-meta span { display: flex; align-items: center; gap: 4px; }
+    .strategy-disabled { opacity: 0.4; }
+    .dir-long { color: var(--accent-green); }
+    .dir-short { color: var(--accent-red); }
+    .dir-opts { color: var(--accent-amber); }
+
+    /* ═══════════ ANALYTICS ═══════════ */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .analytics-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.3s;
+    }
+    .analytics-card:hover { border-color: var(--border-glow); }
+    .analytics-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .analytics-card:nth-child(1) .analytics-icon { background: rgba(56,189,248,0.1); }
+    .analytics-card:nth-child(2) .analytics-icon { background: rgba(167,139,250,0.1); }
+    .analytics-card:nth-child(3) .analytics-icon { background: rgba(52,211,153,0.1); }
+    .analytics-card:nth-child(4) .analytics-icon { background: rgba(244,114,182,0.1); }
+    .analytics-card:nth-child(5) .analytics-icon { background: rgba(251,191,36,0.1); }
+    .analytics-card:nth-child(6) .analytics-icon { background: rgba(34,211,238,0.1); }
+    .analytics-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .analytics-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .analytics-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .analytics-tags span {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+    }
+
+    /* ═══════════ REGIME ═══════════ */
+    .regime-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .regime-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .regime-card:hover { transform: translateY(-2px); }
+    .regime-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .regime-card.green::before { background: var(--accent-green); }
+    .regime-card.yellow::before { background: var(--accent-amber); }
+    .regime-card.red::before { background: var(--accent-red); }
+    .regime-card.cb::before { background: linear-gradient(90deg, var(--accent-red), #991b1b); }
+    .regime-emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+    .regime-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .regime-card.green .regime-name { color: var(--accent-green); }
+    .regime-card.yellow .regime-name { color: var(--accent-amber); }
+    .regime-card.red .regime-name { color: var(--accent-red); }
+    .regime-card.cb .regime-name { color: #ef4444; }
+    .regime-trigger { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .regime-action {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .regime-card.green .regime-action { color: var(--accent-green); }
+    .regime-card.yellow .regime-action { color: var(--accent-amber); }
+    .regime-card.red .regime-action { color: var(--accent-red); }
+    .regime-card.cb .regime-action { color: #ef4444; }
+
+    /* ═══════════ PERFORMANCE ═══════════ */
+    .perf-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .perf-table { width: 100%; border-collapse: collapse; }
+    .perf-table th {
+      padding: 16px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.01);
+      letter-spacing: 0.5px;
+    }
+    .perf-table td {
+      padding: 14px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.02);
+    }
+    .perf-table tr:last-child td { border-bottom: none; }
+    .perf-table tr:hover td { background: rgba(255,255,255,0.015); }
+    .perf-table .metric-name { font-weight: 600; }
+    .perf-table .val-green { color: var(--accent-green); font-weight: 600; font-family: var(--mono); }
+    .perf-table .val-red { color: var(--accent-red); font-weight: 600; font-family: var(--mono); }
+    .perf-table .val-blue { color: var(--accent-blue); font-weight: 600; font-family: var(--mono); }
+
+    /* ═══════════ LEARNING FLOW ═══════════ */
+    .flow-pipeline { display: flex; align-items: center; gap: 0; justify-content: center; }
+    .flow-node {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 16px;
+      text-align: center;
+      min-width: 140px;
+      transition: all 0.3s;
+    }
+    .flow-node:hover { border-color: var(--border-glow); }
+    .flow-node-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+    .flow-node-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .flow-node-time { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+    .flow-arrow { font-size: 20px; color: var(--text-muted); margin: 0 4px; flex-shrink: 0; }
+
+    /* ═══════════ INFRASTRUCTURE ═══════════ */
+    .infra-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .infra-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s;
+    }
+    .infra-card:hover { border-color: var(--border-glow); }
+    .infra-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .infra-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .infra-stat {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent-cyan);
+    }
+
+    /* ═══════════ COMPARISON ═══════════ */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .compare-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+    }
+    .compare-card.nexus {
+      border-color: rgba(52,211,153,0.2);
+      background: linear-gradient(135deg, var(--bg-card), rgba(52,211,153,0.02));
+    }
+    .compare-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+    .compare-list { list-style: none; }
+    .compare-list li {
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .compare-list li:last-child { border-bottom: none; }
+    .check-icon { color: var(--accent-green); font-weight: 700; font-size: 16px; flex-shrink: 0; }
+    .x-icon { color: var(--accent-red); font-weight: 700; font-size: 16px; flex-shrink: 0; opacity: 0.5; }
+
+    /* ═══════════ TECH STACK ═══════════ */
+    .tech-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tech-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s;
+    }
+    .tech-chip:hover { border-color: var(--border-glow); }
+    .tech-name { font-size: 14px; font-weight: 600; }
+    .tech-role { font-size: 11px; color: var(--text-muted); }
+
+    /* ═══════════ FOOTER ═══════════ */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 60px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .footer-brand {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffffff, #64748b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .footer-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .footer-contact { margin-bottom: 32px; font-size: 14px; }
+    .footer-contact a { color: var(--accent-blue); text-decoration: none; transition: color 0.2s; }
+    .footer-contact a:hover { color: var(--accent-cyan); text-decoration: underline; }
+    .footer-divider { color: var(--text-muted); margin: 0 10px; }
+    .footer-legal {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      text-align: left;
+      padding: 28px 32px;
+      background: rgba(255,255,255,0.015);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+    .footer-legal strong { color: var(--text-secondary); }
+    .footer-copy { margin-top: 24px; font-size: 11px; color: var(--text-muted); text-align: center; }
+
+    /* ═══════════ RESPONSIVE — TABLET ═══════════ */
+    @media (max-width: 900px) {
+      .page { padding: 0 24px; }
+      .section-title { font-size: 30px; letter-spacing: -1px; }
+      .section { margin-bottom: 56px; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 56px; }
+      .arch-container { grid-template-columns: 1fr; }
+      .council-grid { grid-template-columns: repeat(2, 1fr); }
+      .analytics-grid { grid-template-columns: repeat(2, 1fr); }
+      .regime-grid { grid-template-columns: repeat(2, 1fr); }
+      .profiles-grid { grid-template-columns: repeat(2, 1fr); }
+      .strategies-grid { grid-template-columns: repeat(2, 1fr); }
+      .compare-grid { grid-template-columns: 1fr; }
+      .infra-grid { grid-template-columns: repeat(2, 1fr); }
+      .flow-pipeline { flex-wrap: wrap; gap: 8px; }
+      .flow-arrow { display: none; }
+      .flow-node { min-width: calc(33% - 8px); flex: 1 1 calc(33% - 8px); }
+      .apex-hero { padding: 28px; }
+      .apex-header { flex-direction: column; gap: 12px; }
+      .hero-brand { flex-wrap: wrap; gap: 10px; }
+      .brand-name { font-size: 32px; }
+      .brand-divider { display: none; }
+      .brand-tagline { font-size: 16px; width: 100%; }
+      .hero-sub { font-size: 17px; }
+      .hero { padding: 36px 0 48px; }
+    }
+
+    /* ═══════════ RESPONSIVE — MOBILE ═══════════ */
+    @media (max-width: 600px) {
+      .page { padding: 0 16px; }
+      .hero { padding: 28px 0 36px; }
+      .brand-name { font-size: 26px; letter-spacing: -1px; }
+      .brand-tagline { font-size: 14px; }
+      .hero-sub { font-size: 15px; margin-bottom: 32px; }
+      .section-label { font-size: 10px; }
+      .section-title { font-size: 24px; letter-spacing: -0.8px; }
+      .section-subtitle { font-size: 14px; margin-bottom: 24px; }
+      .section { margin-bottom: 48px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 48px; }
+      .stat-card { padding: 18px 12px; border-radius: 12px; }
+      .stat-value { font-size: 24px; }
+      .stat-label { font-size: 10px; }
+      .lane-card { padding: 22px 18px; border-radius: 16px; }
+      .lane-title { font-size: 18px; }
+      .lane-features li { font-size: 13px; }
+      .council-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .agent-card { padding: 18px 12px; }
+      .agent-name { font-size: 13px; }
+      .apex-hero { padding: 20px 16px; border-radius: 16px; }
+      .apex-title-group h3 { font-size: 22px; }
+      .strategies-grid { grid-template-columns: 1fr; gap: 10px; }
+      .analytics-grid { grid-template-columns: 1fr; gap: 12px; }
+      .regime-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .profiles-grid { grid-template-columns: 1fr; gap: 12px; }
+      .perf-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .perf-table { min-width: 500px; }
+      .flow-pipeline { flex-direction: column; align-items: stretch; }
+      .flow-node { min-width: unset; width: 100%; }
+      .flow-arrow { display: none; }
+      .compare-card { padding: 22px 18px; }
+      .infra-grid { grid-template-columns: 1fr; gap: 12px; }
+      .footer-contact { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+      .footer-divider { display: none; }
+      .footer-legal { padding: 20px 16px; font-size: 10px; border-radius: 12px; }
+    }
+
+    @media (max-width: 380px) {
+      .page { padding: 0 12px; }
+      .brand-name { font-size: 22px; }
+      .section-title { font-size: 21px; }
+      .stats-grid { gap: 8px; }
+      .stat-value { font-size: 22px; }
+      .regime-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ═══════════ PRINT ═══════════ */
+    @media print {
+      body { background: #fff; color: #111; }
+      .stat-card, .lane-card, .agent-card, .analytics-card,
+      .regime-card, .profile-card, .infra-card, .compare-card, .tech-chip {
+        background: #f9f9f9; border-color: #ddd;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <div class="hero-logo">🌐</div>
-                <h1>NEXUS V98.1</h1>
-                <p class="tagline">Live Iron Condor Trading Engine</p>
-                <p class="subtitle">Multi-broker options execution with walk-forward optimization, institutional-grade analytics, and automated risk management</p>
-            </div>
-        </section>
 
-        <!-- Stats Grid -->
-        <section>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">8</div>
-                    <div class="stat-label">AI Agents</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">LLM Families</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">92.4%</div>
-                    <div class="stat-label">Win Rate</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">181%</div>
-                    <div class="stat-label">PnL Improvement</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">$728</div>
-                    <div class="stat-label">Live Credit</div>
-                </div>
-            </div>
-        </section>
+<div class="page">
 
-        <!-- Two-Lane Architecture -->
-        <section>
-            <h2>⚡ Two-Lane Architecture</h2>
-            <div class="lanes-container">
-                <div class="lane">
-                    <h3>
-                        <span class="lane-icon">🏎️</span>
-                        Fast Lane
-                    </h3>
-                    <div class="lane-item">Direct API integrations (Alpaca, IBKR TWS)</div>
-                    <div class="lane-item">Real-time order execution</div>
-                    <div class="lane-item">Sub-second latency</div>
-                    <div class="lane-item">Live Greeks calculation</div>
-                    <div class="lane-item">Streaming position updates</div>
-                </div>
-                <div class="lane">
-                    <h3>
-                        <span class="lane-icon">🧠</span>
-                        Strategic Lane
-                    </h3>
-                    <div class="lane-item">LLM-powered analysis</div>
-                    <div class="lane-item">Market regime detection</div>
-                    <div class="lane-item">Portfolio optimization</div>
-                    <div class="lane-item">Risk modeling & scenario analysis</div>
-                    <div class="lane-item">Backtesting & walk-forward validation</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Council -->
-        <section>
-            <h2>🤖 AI Council - 8 Agents</h2>
-            <div class="grid-4col">
-                <div class="card">
-                    <h4><span class="icon">📊</span> Analytics Agent</h4>
-                    <p>Real-time Greeks, volatility smiles, and risk aggregation across positions</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🎯</span> Entry Agent</h4>
-                    <p>Delta-optimized entry timing with probability of profit calculations</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🚪</span> Exit Agent</h4>
-                    <p>Automated profit targets, stops, and time-based exit management</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">💰</span> Hedge Agent</h4>
-                    <p>Dynamic tail risk hedging and position rebalancing logic</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📈</span> Macro Agent</h4>
-                    <p>Market regime identification and volatility regime classification</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔧</span> Execution Agent</h4>
-                    <p>Multi-leg order routing and smart order execution algorithms</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">⚠️</span> Risk Agent</h4>
-                    <p>Position sizing, VaR limits, and margin monitoring</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🧪</span> Research Agent</h4>
-                    <p>Backtest analysis, walk-forward validation, and optimization</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- APEX Elite Engine -->
-        <section>
-            <h2>⚙️ APEX Elite Engine - 7 Strategies</h2>
-            <div class="grid-2col">
-                <div class="card">
-                    <h4><span class="icon">📊</span> Iron Condor Neutral</h4>
-                    <div class="strategy-chip">⚖️ Options | BULL/CAUTION</div>
-                    <div class="strategy-chip">Mon/Wed 09:35-14:00</div>
-                    <p>Short-volatility directional-neutral spread captures time decay with defined risk</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📈</span> Bull Call Spread</h4>
-                    <div class="strategy-chip">📈 Options | BULL</div>
-                    <div class="strategy-chip">Tue/Thu 09:30-15:30</div>
-                    <p>Directional bullish strategy with capital efficiency through spreads</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📉</span> Bear Call Spread</h4>
-                    <div class="strategy-chip">📉 Options | BEAR</div>
-                    <div class="strategy-chip">Daily 10:00-15:00</div>
-                    <p>Short-term bearish directional positioning with limited downside risk</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔄</span> Strangle Volatility</h4>
-                    <div class="strategy-chip">⚖️ Options | CAUTION</div>
-                    <div class="strategy-chip">Wed 09:35-14:30</div>
-                    <p>Defined-risk volatility trade capturing moves in both directions</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">💎</span> Collar Hedge</h4>
-                    <div class="strategy-chip">🛡️ Options | DEFENSIVE</div>
-                    <div class="strategy-chip">On demand</div>
-                    <p>Tail risk management strategy protecting long portfolios from large drawdowns</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🎯</span> Calendar Spread</h4>
-                    <div class="strategy-chip">⏰ Options | THETA DECAY</div>
-                    <div class="strategy-chip">Rolling placement</div>
-                    <p>Longer-term theta decay harvest with manageable Greeks rotation</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🚀</span> Ratio Spread</h4>
-                    <div class="strategy-chip">📊 Options | ADVANCED</div>
-                    <div class="strategy-chip">Selective entry</div>
-                    <p>Advanced delta-neutral ratio strategy for volatility and skew exposure</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- V98.1 Live Iron Condor Execution -->
-        <section>
-            <h2>🔥 V98.1 Live Iron Condor Execution</h2>
-
-            <div class="results-box">
-                <h4>📍 Live Execution Results</h4>
-                <div class="result-row">
-                    <div class="result-item">
-                        <div class="label">SPY Iron Condor</div>
-                        <div class="value">2 contracts @ $1.06</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="label">SPY Credit</div>
-                        <div class="value">$212</div>
-                    </div>
-                </div>
-                <div class="result-row">
-                    <div class="result-item">
-                        <div class="label">QQQ Iron Condor</div>
-                        <div class="value">6 contracts @ $0.86</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="label">QQQ Credit</div>
-                        <div class="value">$516</div>
-                    </div>
-                </div>
-                <div class="result-row">
-                    <div class="result-item">
-                        <div class="label">Total Net Credit</div>
-                        <div class="value">$728</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="label">Total Risk</div>
-                        <div class="value" style="color: var(--accent-orange);">$7,272</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-2col">
-                <div class="card">
-                    <h4><span class="icon">🎯</span> Alpaca Multi-Leg Orders</h4>
-                    <p><strong>4-leg limit orders:</strong> Individual legs combined into single order at net credit price.</p>
-                    <p><strong>OCC Symbol Format:</strong> <code>SPY260217P00686000</code> (underlying, date, type, strike)</p>
-                    <p><strong>Position Intents:</strong> buy_to_open, sell_to_open, buy_to_close, sell_to_close</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🚨</span> Automated Exit Triggers</h4>
-                    <p><strong>50% Profit Target:</strong> Auto-close when credit reaches 50% of max profit</p>
-                    <p><strong>2x Per-Side Stops:</strong> Exit if put side or call side loses 2x allocated risk</p>
-                    <p><strong>2:30 PM Time Stop:</strong> Force exit if position not closed by 2:30 PM</p>
-                    <p><strong>3:45 PM Hard Exit:</strong> Force close all positions at market if still open</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📊</span> Greeks Calculation</h4>
-                    <p>Real-time delta, gamma, theta, and vega calculation for multi-leg spreads using Black-Scholes model</p>
-                    <p>Bid-ask midpoint pricing with streaming updates</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔒</span> Risk Management</h4>
-                    <p>Max loss capped at spread width minus credit received</p>
-                    <p>Monitoring of notional exposure and margin requirements</p>
-                </div>
-            </div>
-        </section>
-
-        <div class="section-divider"></div>
-
-        <!-- Walk-Forward Optimization -->
-        <section>
-            <h2>📈 Walk-Forward Optimization - V98.1 Improvements</h2>
-
-            <div class="results-box">
-                <h4>🎯 Optimized Parameters - 2024 Validation</h4>
-                <div class="result-row">
-                    <div class="result-item">
-                        <div class="label">Delta Range</div>
-                        <div class="value">0.25 (was 0.10-0.12)</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="label">PnL Improvement</div>
-                        <div class="value" style="color: var(--accent-green);">+181%</div>
-                    </div>
-                </div>
-                <div class="result-row">
-                    <div class="result-item">
-                        <div class="label">Wing Width</div>
-                        <div class="value">10pt (was 20)</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="label">Trade Increase</div>
-                        <div class="value" style="color: var(--accent-green);">+96%</div>
-                    </div>
-                </div>
-                <div class="result-row">
-                    <div class="result-item">
-                        <div class="label">DTE</div>
-                        <div class="value">7 days (locked)</div>
-                    </div>
-                    <div class="result-item">
-                        <div class="label">Entry Time</div>
-                        <div class="value">09:35 AM</div>
-                    </div>
-                </div>
-                <div class="result-row">
-                    <div class="result-item">
-                        <div class="label">Trading Days</div>
-                        <div class="value">Mon/Wed only</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid-2col">
-                <div class="card">
-                    <h4><span class="icon">✅</span> 2024 Validation Results</h4>
-                    <p><strong>Total PnL:</strong> $6,160 (vs baseline $2,188)</p>
-                    <p><strong>Win Rate:</strong> 92.4%</p>
-                    <p><strong>Total Trades:</strong> 92 trades</p>
-                    <p><strong>Performance Ratio:</strong> 2.82x baseline improvement</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🛡️</span> Aggressive Profile (Hedge Fund Mode)</h4>
-                    <p><strong>Delta Range:</strong> 0.08-0.10 (tighter entry)</p>
-                    <p><strong>Higher Premium Targets:</strong> More capital at risk for increased credit</p>
-                    <p><strong>Larger Position Sizes:</strong> Scaled risk allocation</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- IBKR TWS Broker Integration -->
-        <section>
-            <h2>🏦 IBKR TWS Broker Integration</h2>
-            <div class="grid-2col">
-                <div class="card">
-                    <h4><span class="icon">🔌</span> IBKRTwsBroker Adapter</h4>
-                    <p>Native Python adapter using <code>ib_insync</code> library for Interactive Brokers TWS API integration</p>
-                    <p>Supports full options trading with real-time position sync and P&L tracking</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🌐</span> Socket API Connection</h4>
-                    <p><strong>TWS Socket:</strong> Port 4002 connection to live trading platform</p>
-                    <p><strong>IB Gateway:</strong> Docker container <code>gnzsnz/ib-gateway</code> with automated authentication</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📊</span> Real-Time Data Sync</h4>
-                    <p>Streaming position updates with greeks calculation</p>
-                    <p>Real P&L aggregation across multiple accounts</p>
-                    <p>Margin monitoring and risk limits enforcement</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">⚡</span> Asyncio Event Loop Integration</h4>
-                    <p>Multi-threaded Streamlit + autopilot compatibility</p>
-                    <p>Non-blocking order execution and data retrieval</p>
-                    <p>Proper async context management for long-running connections</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Institutional-Grade Analytics -->
-        <section>
-            <h2>📊 Institutional-Grade Analytics</h2>
-            <div class="grid-3col">
-                <div class="card">
-                    <h4><span class="icon">💹</span> Greeks Dashboard</h4>
-                    <p>Real-time delta, gamma, theta, vega aggregation across portfolio with IV surface visualization</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🎯</span> Probability of Profit</h4>
-                    <p>Lognormal distribution P&L probability calculation with strike-specific win rates</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📈</span> Volatility Analytics</h4>
-                    <p>Realized vs implied volatility tracking with term structure and smile analysis</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔄</span> Portfolio Greeks</h4>
-                    <p>Aggregated multi-leg position Greeks with real-time updating from market feeds</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">⚠️</span> Risk Exposure</h4>
-                    <p>VaR at 95/99 confidence levels with scenario analysis and stress testing</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🎓</span> Performance Attribution</h4>
-                    <p>Greeks P&L decomposition with theta, vega, and gamma attribution analysis</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Market Regime Detection -->
-        <section>
-            <h2>🎭 Market Regime Detection</h2>
-            <div class="grid-2col">
-                <div class="card">
-                    <h4><span class="icon">📊</span> Volatility Regime</h4>
-                    <p><strong>Classification:</strong> Low, Normal, High, Extreme</p>
-                    <p><strong>Signal:</strong> VIX percentile + 20-day realized vol ratio</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📈</span> Trend Regime</h4>
-                    <p><strong>Classification:</strong> Downtrend, Consolidation, Uptrend</p>
-                    <p><strong>Signal:</strong> 20/50 EMA cross + ADX strength indicator</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔄</span> Mean Reversion Regime</h4>
-                    <p><strong>Classification:</strong> Oversold, Normal, Overbought</p>
-                    <p><strong>Signal:</strong> RSI and Bollinger Band position analysis</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">⚖️</span> Breadth Regime</h4>
-                    <p><strong>Classification:</strong> Weak, Neutral, Strong</p>
-                    <p><strong>Signal:</strong> Advance/decline ratio and market participation</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Four Risk Profiles -->
-        <section>
-            <h2>🎯 Four Risk Profiles</h2>
-            <div class="risk-profiles">
-                <div class="risk-card conservative">
-                    <div class="risk-title">⚪ Conservative</div>
-                    <div class="risk-stat">
-                        <span class="label">Max Leverage:</span>
-                        <span class="value">1.0x</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Position Size:</span>
-                        <span class="value">0.5-1%</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Delta Range:</span>
-                        <span class="value">0.30-0.35</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Stop Loss:</span>
-                        <span class="value">1x risk</span>
-                    </div>
-                </div>
-                <div class="risk-card balanced">
-                    <div class="risk-title">🟡 Balanced</div>
-                    <div class="risk-stat">
-                        <span class="label">Max Leverage:</span>
-                        <span class="value">2.0x</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Position Size:</span>
-                        <span class="value">1-2%</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Delta Range:</span>
-                        <span class="value">0.25-0.30</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Stop Loss:</span>
-                        <span class="value">1.5x risk</span>
-                    </div>
-                </div>
-                <div class="risk-card aggressive">
-                    <div class="risk-title">🟠 Aggressive</div>
-                    <div class="risk-stat">
-                        <span class="label">Max Leverage:</span>
-                        <span class="value">3.0x</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Position Size:</span>
-                        <span class="value">2-3%</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Delta Range:</span>
-                        <span class="value">0.20-0.25</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Stop Loss:</span>
-                        <span class="value">2x risk</span>
-                    </div>
-                </div>
-                <div class="risk-card hedge">
-                    <div class="risk-title">🔴 Hedge Fund</div>
-                    <div class="risk-stat">
-                        <span class="label">Max Leverage:</span>
-                        <span class="value">5.0x+</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Position Size:</span>
-                        <span class="value">3-5%</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Delta Range:</span>
-                        <span class="value">0.08-0.10</span>
-                    </div>
-                    <div class="risk-stat">
-                        <span class="label">Stop Loss:</span>
-                        <span class="value">2.5x risk</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 8-Year Backtested Performance -->
-        <section>
-            <h2>📊 8-Year Backtested Performance</h2>
-            <div style="overflow-x: auto;">
-                <table class="performance-table">
-                    <thead>
-                        <tr>
-                            <th>Period</th>
-                            <th>Total Return</th>
-                            <th>Win Rate</th>
-                            <th>Profit Factor</th>
-                            <th>Max Drawdown</th>
-                            <th>Sharpe Ratio</th>
-                            <th>Trades</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2017</td>
-                            <td class="positive">+18.4%</td>
-                            <td class="positive">88.2%</td>
-                            <td class="positive">2.14</td>
-                            <td class="negative">-8.3%</td>
-                            <td class="positive">1.72</td>
-                            <td>47</td>
-                        </tr>
-                        <tr>
-                            <td>2018</td>
-                            <td class="negative">-4.2%</td>
-                            <td class="positive">82.1%</td>
-                            <td class="positive">1.58</td>
-                            <td class="negative">-11.2%</td>
-                            <td class="negative">-0.34</td>
-                            <td>62</td>
-                        </tr>
-                        <tr>
-                            <td>2019</td>
-                            <td class="positive">+24.7%</td>
-                            <td class="positive">89.5%</td>
-                            <td class="positive">2.51</td>
-                            <td class="negative">-6.1%</td>
-                            <td class="positive">2.18</td>
-                            <td>58</td>
-                        </tr>
-                        <tr>
-                            <td>2020</td>
-                            <td class="positive">+31.2%</td>
-                            <td class="positive">91.3%</td>
-                            <td class="positive">2.87</td>
-                            <td class="negative">-5.4%</td>
-                            <td class="positive">2.94</td>
-                            <td>75</td>
-                        </tr>
-                        <tr>
-                            <td>2021</td>
-                            <td class="positive">+16.8%</td>
-                            <td class="positive">86.7%</td>
-                            <td class="positive">2.02</td>
-                            <td class="negative">-7.8%</td>
-                            <td class="positive">1.64</td>
-                            <td>69</td>
-                        </tr>
-                        <tr>
-                            <td>2022</td>
-                            <td class="positive">+12.3%</td>
-                            <td class="positive">84.2%</td>
-                            <td class="positive">1.76</td>
-                            <td class="negative">-9.5%</td>
-                            <td class="positive">1.18</td>
-                            <td>81</td>
-                        </tr>
-                        <tr>
-                            <td>2023</td>
-                            <td class="positive">+28.6%</td>
-                            <td class="positive">90.1%</td>
-                            <td class="positive">2.64</td>
-                            <td class="negative">-4.2%</td>
-                            <td class="positive">2.72</td>
-                            <td>73</td>
-                        </tr>
-                        <tr>
-                            <td>2024 (YTD)</td>
-                            <td class="positive">+22.1%</td>
-                            <td class="positive">92.4%</td>
-                            <td class="positive">2.98</td>
-                            <td class="negative">-3.8%</td>
-                            <td class="positive">3.14</td>
-                            <td>92</td>
-                        </tr>
-                        <tr style="font-weight: 700; background: var(--bg-secondary);">
-                            <td>8-Year Average</td>
-                            <td class="positive">+19.4%</td>
-                            <td class="positive">88.2%</td>
-                            <td class="positive">2.31</td>
-                            <td class="negative">-7.1%</td>
-                            <td class="positive">1.94</td>
-                            <td>67</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Critical Bug Fixes -->
-        <section>
-            <h2>🐛 Critical Bug Fixes - V98.1</h2>
-            <div class="grid-2col">
-                <div class="card">
-                    <h4><span class="icon">🚪</span> Exit Orders Not Placed</h4>
-                    <p><strong>Issue:</strong> Positions remained open indefinitely, no automatic exit execution</p>
-                    <p><strong>Fix:</strong> Implemented proper exit_order pipeline in execution service with status tracking</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">⚙️</span> Trailing Stop Configuration</h4>
-                    <p><strong>Issue:</strong> Parameter names inconsistent (activation distance vs ATR distance)</p>
-                    <p><strong>Fix:</strong> Standardized to <code>trailing_stop_activation: 0.5R</code> and <code>trailing_stop_distance: 0.5 ATR</code></p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔴</span> Aggressive Profile Missing Execution</h4>
-                    <p><strong>Issue:</strong> Hedge fund profile lacked execution_service configuration</p>
-                    <p><strong>Fix:</strong> Added full execution_service to aggressive profile with all adapters</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📊</span> Delta Range Too Narrow</h4>
-                    <p><strong>Issue:</strong> Delta 0.25-0.28 range reduced trade opportunities</p>
-                    <p><strong>Fix:</strong> Expanded to 0.24-0.29 with optimized entry weighting</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📈</span> Spread Tolerance Misconfiguration</h4>
-                    <p><strong>Issue:</strong> 10% max spread tolerance too restrictive during illiquid periods</p>
-                    <p><strong>Fix:</strong> Increased to 20% with dynamic adjustment for bid-ask spreads</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📅</span> Day-of-Week Detection Bug</h4>
-                    <p><strong>Issue:</strong> Using datetime.now() instead of historical date in backtests caused incorrect trading days</p>
-                    <p><strong>Fix:</strong> Pass correct date context through all entry/exit logic</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">⏰</span> Dead Trade Time Stop</h4>
-                    <p><strong>Issue:</strong> Time stop disabled for stock execution, positions stayed open past market close</p>
-                    <p><strong>Fix:</strong> Re-enabled with 3:45 PM hard exit for all asset classes</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Self-Learning System -->
-        <section>
-            <h2>🔄 Self-Learning System</h2>
-            <div class="pipeline">
-                <div class="pipeline-step">
-                    <h4>📊 Live Data</h4>
-                    <p>Options chains, greeks, skew updates</p>
-                </div>
-                <div class="pipeline-step">
-                    <h4>🔍 Pattern Detection</h4>
-                    <p>ML classification of market regimes</p>
-                </div>
-                <div class="pipeline-step">
-                    <h4>⚙️ Parameter Optimization</h4>
-                    <p>Walk-forward delta tuning</p>
-                </div>
-                <div class="pipeline-step">
-                    <h4>📈 Backtest Validation</h4>
-                    <p>72-hour rolling validation</p>
-                </div>
-                <div class="pipeline-step">
-                    <h4>✅ Live Deployment</h4>
-                    <p>Approved parameters to production</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- What Sets Nexus Apart -->
-        <section>
-            <h2>🌟 What Sets Nexus Apart</h2>
-            <div class="comparison-grid">
-                <div class="comparison-col">
-                    <h4>🚀 Nexus V98.1 (Advanced)</h4>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>Live multi-leg iron condor execution</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>181% walk-forward optimization gain</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>IBKR TWS real-time integration</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>92.4% win rate on 92 trades</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>Automated 50% profit targets</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>2x per-side stop losses</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>Time-based hard exits (3:45 PM)</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>Real-time Greeks aggregation</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✓</span>
-                        <span>8 specialized AI agents</span>
-                    </div>
-                </div>
-                <div class="comparison-col">
-                    <h4>📊 Traditional Systems</h4>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Single-leg or manual spreads</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Static parameter optimization</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Delayed order routing</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>60-75% typical win rates</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Manual profit-taking</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Single stop per position</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Overnight position risk</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Greeks manual calculation</span>
-                    </div>
-                    <div class="comparison-item">
-                        <span class="icon">✗</span>
-                        <span>Operator-dependent decisions</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Production Infrastructure -->
-        <section>
-            <h2>🏗️ Production Infrastructure</h2>
-            <div class="grid-3col">
-                <div class="card">
-                    <h4><span class="icon">⚡</span> Order Execution</h4>
-                    <p>Sub-100ms order routing with Alpaca REST API, multi-leg order support, and real-time order status tracking</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📡</span> Data Streaming</h4>
-                    <p>WebSocket price feeds with 100ms latency, Greeks calculation, and volatility smile updates</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">💾</span> State Management</h4>
-                    <p>PostgreSQL position database with audit trail, Redis cache for real-time metrics</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔔</span> Alerting System</h4>
-                    <p>Event-driven notifications for fills, margin alerts, Greeks threshold breaches</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">📊</span> Analytics Engine</h4>
-                    <p>Real-time P&L aggregation, Greeks decomposition, attribution analysis</p>
-                </div>
-                <div class="card">
-                    <h4><span class="icon">🔐</span> Security Layer</h4>
-                    <p>OAuth2 authentication, API key encryption, audit logging of all operations</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Technology Stack -->
-        <section>
-            <h2>🛠️ Technology Stack</h2>
-            <div class="tech-stack">
-                <div class="tech-chip">Python 3.11+</div>
-                <div class="tech-chip">FastAPI</div>
-                <div class="tech-chip">Streamlit</div>
-                <div class="tech-chip">PostgreSQL</div>
-                <div class="tech-chip">Redis</div>
-                <div class="tech-chip">Alpaca SDK</div>
-                <div class="tech-chip">ib_insync</div>
-                <div class="tech-chip">Docker</div>
-                <div class="tech-chip">NumPy</div>
-                <div class="tech-chip">Pandas</div>
-                <div class="tech-chip">SciPy</div>
-                <div class="tech-chip">Claude API</div>
-                <div class="tech-chip">OpenAI</div>
-                <div class="tech-chip">Anthropic LLMs</div>
-                <div class="tech-chip">WebSockets</div>
-                <div class="tech-chip">Asyncio</div>
-                <div class="tech-chip">Black-Scholes</div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer>
-            <p><strong>Nexus V98.1 System Debrief</strong></p>
-            <p>Live Iron Condor Trading Engine with Multi-Broker Integration</p>
-            <p style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Generated: February 2025</p>
-            <div class="legal">
-                <p><strong>Disclaimer:</strong> This document describes an automated trading system for educational and informational purposes. Past performance does not guarantee future results. Futures, options, and other derivatives trading carries substantial risk of loss. Options trading may not be suitable for all investors. Please consult with a financial advisor before implementing any trading strategy. The system described is a research tool only and should not be considered financial advice.</p>
-                <p style="margin-top: 1rem;"><strong>Risk Notice:</strong> Iron condor and options strategies involve complex execution and carry risks including unlimited losses on certain legs, early assignment, and gap risk. Users should fully understand these risks before implementation.</p>
-            </div>
-        </footer>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-brand fade-up">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 768" class="hero-logo" style="width:72px;height:72px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);padding:8px;background:rgba(255,255,255,0.04);" fill="#38bdf8" stroke="none">
+            <path d="M632.854248,406.170227 C661.173645,434.409973 689.233398,462.416565 717.334534,490.381561 C721.818970,494.844360 726.399475,499.220306 731.103455,503.449707 C734.545044,506.544067 734.824463,509.200806 731.347229,512.570618 C723.691589,519.989563 716.259583,527.639587 708.749329,535.208252 C687.057495,557.068665 665.389282,578.952576 643.680176,600.795776 C610.345398,634.336670 576.985901,667.852844 543.633057,701.375732 C536.123108,708.923950 528.445618,716.313293 521.142700,724.056274 C517.452209,727.969177 515.015259,726.796753 511.809570,723.517029 C494.459045,705.765869 476.988861,688.131165 459.503937,670.511902 C411.629303,622.269348 363.745544,574.035828 315.826263,525.837646 C295.397034,505.289490 274.908081,484.800140 254.333832,464.397461 C252.115372,462.197540 252.628464,461.051514 254.523315,459.189362 C272.339203,441.680511 290.156342,424.171387 307.779572,406.469727 C310.515625,403.721527 311.995331,403.912964 314.546509,406.487335 C340.227661,432.402008 366.061310,458.165558 391.751495,484.071350 C432.215790,524.875305 472.656586,565.703064 512.938049,606.687195 C516.914978,610.733459 519.013428,608.654297 521.771545,605.843994 C547.673767,579.451660 573.598755,553.081665 599.521973,526.709900 C603.842407,522.314758 608.099731,517.852417 612.546448,513.588257 C616.114929,510.166290 616.408875,507.177277 612.750244,503.469513 C600.004761,490.553040 587.857605,477.048767 574.592529,464.640472 C573.887939,463.981415 573.274170,463.225220 572.706604,462.610046 C573.162109,460.231506 574.730469,458.904938 576.117432,457.506653 C592.894409,440.592346 609.695923,423.702393 626.491211,406.806244 C628.308350,404.978180 630.093445,402.921356 632.854248,406.170227 z"/>
+            <path d="M473.615356,245.397949 C495.629517,267.469208 517.369202,289.325409 539.229553,311.060211 C541.291321,313.110138 541.365845,314.408325 539.413147,316.358459 C521.371948,334.376007 503.350739,352.413696 485.371490,370.493042 C482.526031,373.354340 480.950867,370.952637 479.255615,369.237823 C467.541321,357.388275 455.925995,345.440430 444.166626,333.636017 C410.067963,299.406616 375.878143,265.268005 341.800720,231.017548 C322.531403,211.650360 303.421600,192.124496 284.221466,172.688370 C277.464172,165.848038 277.276398,166.006958 270.607391,172.785675 C249.107376,194.639435 227.499634,216.387222 205.934067,238.176514 C197.852478,246.341949 189.613113,254.359421 181.754654,262.734253 C177.371521,267.405365 177.498337,269.060211 182.063934,273.723419 C193.713165,285.621765 205.484253,297.403320 217.352539,309.083313 C221.937485,313.595490 222.130936,313.766998 217.440140,318.442688 C200.446777,335.381378 183.419754,352.286438 166.477982,369.276550 C163.935715,371.826080 162.069092,372.573700 159.107086,369.560089 C132.949402,342.946106 106.644745,316.476624 80.411964,289.936340 C74.675865,284.132996 69.181885,278.084900 63.327312,272.406311 C60.111858,269.287506 59.994888,267.003632 63.289101,263.781433 C74.840652,252.482407 86.179436,240.965378 97.568794,229.501083 C141.123291,185.660065 184.651291,141.792725 228.221207,97.967049 C243.248947,82.851082 258.420898,67.878220 273.407623,52.721966 C276.572296,49.521526 278.560944,49.039181 282.165649,52.690517 C319.025208,90.026871 356.127136,127.123878 393.127899,164.320999 C419.902710,191.237869 446.627136,218.204849 473.615356,245.397949 z"/>
+            <path d="M264.774902,716.199402 C244.857697,696.048157 225.218948,676.122559 205.489075,656.287598 C172.829010,623.453735 140.079514,590.708801 107.429985,557.864441 C92.518417,542.863892 77.828911,527.642029 62.867268,512.692200 C59.570320,509.397766 59.888466,507.241791 63.042786,504.101349 C88.073677,479.180481 112.974258,454.128723 137.905151,429.107483 C163.534210,403.385559 189.133591,377.634033 214.780731,351.930176 C237.842590,328.817352 260.969391,305.769226 284.032532,282.657684 C296.269073,270.395477 308.447174,258.074738 320.612427,245.741699 C322.805450,243.518402 324.456085,243.390884 326.806335,245.830124 C343.677704,263.340332 360.612335,280.791504 377.719421,298.070801 C380.757507,301.139526 380.394348,302.689484 377.462341,305.597321 C356.646515,326.241394 336.250977,347.311310 315.334991,367.851898 C272.415558,410.001068 230.394943,453.030975 188.554916,496.242462 C186.004944,498.876068 183.409515,501.466125 180.811691,504.052734 C177.766632,507.084656 177.716400,509.915924 180.848282,513.072937 C197.390167,529.747437 213.865585,546.488037 230.325424,563.243713 C241.413757,574.531372 252.414932,585.904785 263.504547,597.191223 C267.003632,600.752380 270.711792,604.107666 274.232422,607.648499 C276.841217,610.272278 279.106476,609.767761 281.483093,607.337891 C293.947968,594.593567 306.526367,581.958618 318.865021,569.093567 C321.411652,566.438232 322.954559,565.393738 326.014313,568.483032 C342.898468,585.529907 359.893250,602.469177 377.018250,619.273987 C380.490051,622.680847 380.189301,624.848511 376.853943,628.195435 C344.758911,660.401672 312.775391,692.719543 280.902100,725.145203 C277.880188,728.219482 276.053986,728.192627 273.393738,725.037354 C270.824890,721.990479 267.823669,719.308228 264.774902,716.199402 z"/>
+            <path d="M503.088623,383.090576 C534.422852,351.718811 565.519348,320.609558 596.591797,289.476379 C602.004333,284.053253 607.312378,278.525909 612.674377,273.052307 C616.639221,269.004883 617.066589,267.041473 613.060486,262.847107 C604.091187,253.456253 594.470947,244.682251 585.594543,235.208450 C565.426819,213.683395 543.438354,193.970200 523.440308,172.277695 C516.594360,164.851654 516.422058,165.171188 509.498474,172.181320 C497.558075,184.271072 485.455017,196.200287 473.533325,208.308258 C471.202637,210.675400 469.769745,210.500351 467.475281,208.175644 C450.390320,190.865601 433.208710,173.650162 415.951416,156.511765 C413.113312,153.693192 412.950012,151.933746 415.999084,148.892685 C435.104797,129.837234 454.429047,111.003059 473.242889,91.647575 C486.584747,77.921570 500.647552,64.887428 513.807983,50.967575 C515.907349,48.747128 516.998352,49.237011 518.952393,51.203129 C544.427490,76.835365 570.009766,102.361008 595.551819,127.926682 C628.510681,160.916138 661.456421,193.918610 694.410339,226.912949 C705.585876,238.102203 716.776917,249.276047 727.938171,260.479492 C729.228699,261.774902 730.304016,263.285461 731.600464,264.574158 C734.143188,267.101593 733.866455,269.136871 731.305054,271.690796 C714.326599,288.619812 697.487061,305.688171 680.588196,322.697083 C656.053650,347.391357 631.404175,371.977600 606.680664,396.475250 C569.640625,433.176971 533.497742,470.757874 496.545349,507.540802 C488.307251,515.741089 480.764832,524.638306 470.401764,533.017578 C463.460876,525.632385 456.627673,518.177673 449.588898,510.914581 C438.926697,499.906555 428.302948,488.849579 417.284302,478.205292 C413.713318,474.7575615 413.810272,472.737518 417.137665,469.417297 C444.500885,442.112946 471.742065,414.686249 499.016632,387.293091 C500.309570,385.994537 501.568176,384.661804 503.088623,383.090576 z"/>
+          </svg>
+      <span class="brand-name">Nexus Investing</span>
+      <span class="brand-divider">|</span>
+      <span class="brand-tagline">Autonomous AI-Powered Trading System</span>
     </div>
+    <p class="hero-sub fade-up fade-up-1">
+      An autonomous trading engine powered by <strong>8 AI agents</strong> across <strong>5 LLM families</strong>,
+      managing <strong>6 trading profiles</strong> across <strong>6 brokerage accounts</strong> &mdash;
+      built to think, debate, and trade like a hedge fund.
+    </p>
+  </div>
+
+  <!-- HERO STATS -->
+  <div class="stats-grid">
+    <div class="stat-card fade-up fade-up-1">
+      <div class="stat-value green">57&times;</div>
+      <div class="stat-label">Backtest Return (7yr)</div>
+    </div>
+    <div class="stat-card fade-up fade-up-2">
+      <div class="stat-value blue">8</div>
+      <div class="stat-label">AI Agents</div>
+    </div>
+    <div class="stat-card fade-up fade-up-3">
+      <div class="stat-value purple">6</div>
+      <div class="stat-label">Trading Profiles</div>
+    </div>
+    <div class="stat-card fade-up fade-up-4">
+      <div class="stat-value amber">38,284</div>
+      <div class="stat-label">Backtests Validated</div>
+    </div>
+    <div class="stat-card fade-up fade-up-5">
+      <div class="stat-value cyan">5</div>
+      <div class="stat-label">LLM Families</div>
+    </div>
+    <div class="stat-card fade-up fade-up-6">
+      <div class="stat-value pink">0%</div>
+      <div class="stat-label">Ruin Probability</div>
+    </div>
+  </div>
+
+  <!-- TWO-LANE ARCHITECTURE -->
+  <div class="section">
+    <div class="section-label">Architecture</div>
+    <div class="section-title">Two-Lane Engine Design</div>
+    <div class="section-subtitle">A Fast Lane for intraday momentum with sub-second Python execution, and a Strategic Lane for position trading with full multi-agent AI council deliberation.</div>
+
+    <div class="arch-container">
+      <div class="lane-card fast">
+        <div class="lane-tag">&#9889; FAST LANE</div>
+        <div class="lane-title">Day Trading Engines</div>
+        <div class="lane-desc">Four specialized engines for intraday momentum, options, short selling, micro-cap pumps, and small-cap breakouts. All positions flattened by EOD.</div>
+        <div class="lane-profiles">
+          <span class="profile-pill apex">APEX Elite</span>
+          <span class="profile-pill aggressive">Aggressive</span>
+          <span class="profile-pill pdh">Pump &amp; Dump Hunter</span>
+          <span class="profile-pill ross">Ross Cameron</span>
+        </div>
+        <ul class="lane-features">
+          <li><span class="icon">&#127919;</span> Python gatekeeper for instant strategy selection (&lt;10ms)</li>
+          <li><span class="icon">&#128200;</span> Open universe scanning — 65+ candidates per cycle via FMP</li>
+          <li><span class="icon">&#128161;</span> 6-detector composite scoring for pump detection</li>
+          <li><span class="icon">&#129504;</span> LLM catalyst grading with 4-provider fallback chain</li>
+          <li><span class="icon">&#128308;</span> Redis Streams signal bus — &lt;5ms emergency latency</li>
+          <li><span class="icon">&#128202;</span> ATR trailing stops let winners run (2.0&times; multiplier)</li>
+        </ul>
+      </div>
+
+      <div class="lane-card strategic">
+        <div class="lane-tag">&#129504; STRATEGIC LANE</div>
+        <div class="lane-title">Position Trading Engine</div>
+        <div class="lane-desc">Multi-agent AI council deliberation for longer-term positions. Quality-momentum screening, dividend aristocrats, and covered call income.</div>
+        <div class="lane-profiles">
+          <span class="profile-pill moderate">Moderate</span>
+          <span class="profile-pill conservative">Conservative</span>
+        </div>
+        <ul class="lane-features">
+          <li><span class="icon">&#128101;</span> 8 AI agents debate every trade decision</li>
+          <li><span class="icon">&#128200;</span> Bull vs Bear researcher adversarial analysis</li>
+          <li><span class="icon">&#128176;</span> Quality-momentum stock screening (ROE &gt;15%, D/E &lt;0.5)</li>
+          <li><span class="icon">&#127942;</span> Dividend Aristocrat filtering (25+ year streaks)</li>
+          <li><span class="icon">&#128203;</span> Covered call income overlay on held positions</li>
+          <li><span class="icon">&#128737;</span> Post-earnings drift capture (PEAD strategy)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI COUNCIL -->
+  <div class="section">
+    <div class="section-label">AI Council</div>
+    <div class="section-title">The AI Council</div>
+    <div class="section-subtitle">Every trade decision is evaluated by 8 specialized agents across 5 LLM families. No single model controls the outcome &mdash; diverse reasoning ensures robust decisions.</div>
+
+    <div class="council-grid">
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQwNiAyNDA2Ij4KCTxwYXRoIGQ9Ik0xIDU3OC40QzEgMjU5LjUgMjU5LjUgMSA1NzguNCAxaDEyNDkuMWMzMTkgMCA1NzcuNSAyNTguNSA1NzcuNSA1NzcuNFYyNDA2SDU3OC40QzI1OS41IDI0MDYgMSAyMTQ3LjUgMSAxODI4LjZWNTc4LjR6IiBmaWxsPSIjNzRhYTljIi8+Cgk8cGF0aCBpZD0iYSIgZD0iTTExMDcuMyAyOTkuMWMtMTk3Ljk5OSAwLTM3My45IDEyNy4zLTQzNS4yIDMxNS4zTDY1MCA3NDMuNXY0MjcuOWMwIDIxLjQgMTEgNDAuNCAyOS40IDUxLjRsMzQ0LjUgMTk4LjUxNVY4MzMuM2guMXYtMjcuOUwxMzcyLjcgNjA0YzMzLjcxNS0xOS41MiA3MC40NC0zMi44NTcgMTA4LjQ3LTM5LjgyOEwxNDQ3LjYgNDUwLjNDMTM2MSAzNTMuNSAxMjM3LjEgMjk4LjUgMTEwNy4zIDI5OS4xem0wIDExNy41LS42LjZjNzkuNjk5IDAgMTU2LjMgMjcuNSAyMTcuNiA3OC40LTIuNSAxLjItNy40IDQuMy0xMSA2LjFMOTUyLjggNzA5LjNjLTE4LjQgMTAuNC0yOS40IDMwLTI5LjQgNTEuNFYxMjQ4bC0xNTUuMS04OS40Vjc1NS44Yy0uMS0xODcuMDk5IDE1MS42MDEtMzM4LjkgMzM5LTMzOS4yeiIgZmlsbD0iI2ZmZiIvPgoJPHVzZSB4bGluazpocmVmPSIjYSIgdHJhbnNmb3JtPSJyb3RhdGUoNjAgMTIwMyAxMjAzKSIvPgogIAk8dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjAgMTIwMyAxMjAzKSIvPgoJPHVzZSB4bGluazpocmVmPSIjYSIgdHJhbnNmb3JtPSJyb3RhdGUoMTgwIDEyMDMgMTIwMykiLz4KCTx1c2UgeGxpbms6aHJlZj0iI2EiIHRyYW5zZm9ybT0icm90YXRlKDI0MCAxMjAzIDEyMDMpIi8+Cgk8dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSgzMDAgMTIwMyAxMjAzKSIvPgoKPC9zdmc+" alt="">
+        <div class="agent-name">Market Analyst</div>
+        <div class="agent-model">GPT-4o</div>
+        <div class="agent-role">Price, volume &amp; technicals</div>
+      </div>
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsgZmlsbDogI2RhNzc1NjsgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPCEtLSA0IHJvdW5kZWQgYmFycyByb3RhdGVkIHRvIGZvcm0gOC1wb2ludGVkIHN0YXIgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTAsNTApIj4KICAgIDwhLS0gVmVydGljYWwgLS0+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiBjbGFzcz0iY2xzLTEiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDkwKSIgY2xhc3M9ImNscy0xIi8+CiAgICA8IS0tIERpYWdvbmFscyAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDQ1KSIgY2xhc3M9ImNscy0xIi8+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiB0cmFuc2Zvcm09InJvdGF0ZSgxMzUpIiBjbGFzcz0iY2xzLTEiLz4KICA8L2c+Cjwvc3ZnPg==" alt="">
+        <div class="agent-name">Fundamentals</div>
+        <div class="agent-model">Claude Sonnet</div>
+        <div class="agent-role">Revenue, margins, valuation</div>
+      </div>
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQ0IiBoZWlnaHQ9IjEyNyIgdmlld0JveD0iMCAwIDM0NCAxMjciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxtYXNrIGlkPSJtYXNrMF85NThfMTU4ODEiIHN0eWxlPSJtYXNrLXR5cGU6YWxwaGEiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSIzNDQiIGhlaWdodD0iMTI3Ij4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMzQuMTIzIDQxLjIyMDRDMjM1LjQ4OSA0NC4zMzU0IDIzNi4xNzIgNDcuNjYzOCAyMzYuMTcyIDUxLjIwNTVDMjM2LjE3MiA0Ny42NjM4IDIzNi44MzMgNDQuMzM1NCAyMzguMTU2IDQxLjIyMDRDMjM5LjUyMSAzOC4xMDU0IDI0MS4zNTYgMzUuMzk1OCAyNDMuNjYgMzMuMDkxNkMyNDUuOTY1IDMwLjc4NzMgMjQ4LjY3NCAyOC45NzM4IDI1MS43ODkgMjcuNjUxQzI1NC45MDQgMjYuMjg1NSAyNTguMjMzIDI1LjYwMjggMjYxLjc3NCAyNS42MDI4QzI1OC4yMzMgMjUuNjAyOCAyNTQuOTA0IDI0Ljk0MTQgMjUxLjc4OSAyMy42MTg1QzI0OC42NzQgMjIuMjUzMSAyNDUuOTY1IDIwLjQxODIgMjQzLjY2IDE4LjExNEMyNDEuMzU2IDE1LjgwOTcgMjM5LjUyMSAxMy4xMDAxIDIzOC4xNTYgOS45ODUwN0MyMzYuODMzIDYuODcwMDcgMjM2LjE3MiAzLjU0MTcxIDIzNi4xNzIgMEMyMzYuMTcyIDMuNTQxNzEgMjM1LjQ4OSA2Ljg3MDA3IDIzNC4xMjMgOS45ODUwN0MyMzIuODAxIDEzLjEwMDEgMjMwLjk4NyAxNS44MDk3IDIyOC42ODMgMTguMTE0QzIyNi4zNzkgMjAuNDE4MiAyMjMuNjY5IDIyLjI1MzEgMjIwLjU1NCAyMy42MTg1QzIxNy40MzkgMjQuOTQxNCAyMTQuMTExIDI1LjYwMjggMjEwLjU2OSAyNS42MDI4QzIxNC4xMTEgMjUuNjAyOCAyMTcuNDM5IDI2LjI4NTUgMjIwLjU1NCAyNy42NTFDMjIzLjY2OSAyOC45NzM4IDIyNi4zNzkgMzAuNzg3MyAyMjguNjgzIDMzLjA5MTZDMjMwLjk4NyAzNS4zOTU4IDIzMi44MDEgMzguMTA1NCAyMzQuMTIzIDQxLjIyMDRaTTI2LjE1MzIgMTIzLjE0QzMxLjM3NjIgMTI1LjI5MSAzNi45NDQ4IDEyNi4zNjYgNDIuODU5IDEyNi4zNjZDNDguODUwMSAxMjYuMzY2IDU0LjMwMzUgMTI1LjQwNiA1OS4yMTkyIDEyMy40ODZDNjQuMTM0OSAxMjEuNTY2IDY4LjM5NzggMTE4LjgzOSA3Mi4wMDc4IDExNS4zMDZDNzUuNjE3OCAxMTEuNzczIDc4LjQyMTMgMTA3LjU4NyA4MC40MTgzIDEwMi43NDhDODIuNDE1MyA5Ny44MzIxIDgzLjQxMzggOTIuNDU1NSA4My40MTM4IDg2LjYxODFWODYuNTAyOUM4My40MTM4IDg1LjQyNzYgODMuMzM3IDg0LjQyOSA4My4xODM0IDgzLjUwNzNDODMuMTA2NiA4Mi41ODU2IDgyLjk5MTQgODEuNjI1NSA4Mi44Mzc3IDgwLjYyN0g0My4wODk1VjkwLjE4OTdINzMuMDQ0N0M3Mi43Mzc0IDk0Ljc5ODIgNzEuNjYyMSA5OC43OTIyIDY5LjgxODcgMTAyLjE3MkM2OC4wNTIxIDEwNS40NzUgNjUuNzg2MyAxMDguMjAxIDYzLjAyMTIgMTEwLjM1MkM2MC4zMzI5IDExMi41MDIgNTcuMjIyMiAxMTQuMTE1IDUzLjY4OSAxMTUuMTkxQzUwLjIzMjYgMTE2LjE4OSA0Ni42MjI2IDExNi42ODkgNDIuODU5IDExNi42ODlDMzguNzExNCAxMTYuNjg5IDM0LjY3ODkgMTE1LjkyIDMwLjc2MTcgMTE0LjM4NEMyNi44NDQ1IDExMi44NDggMjMuMzQ5NyAxMTAuNjIxIDIwLjI3NzQgMTA3LjcwMkMxNy4yODE5IDEwNC43ODMgMTQuOTAwOCAxMDEuMjg4IDEzLjEzNDIgOTcuMjE3NkMxMS4zNjc2IDkzLjA3IDEwLjQ4NDMgODguNDIzMSAxMC40ODQzIDgzLjI3NjlDMTAuNDg0MyA3OC4xMzA4IDExLjMyOTIgNzMuNTIyMyAxMy4wMTkgNjkuNDUxNEMxNC43ODU2IDY1LjMwMzggMTcuMTY2NyA2MS44MDkgMjAuMTYyMiA1OC45NjcxQzIzLjE1NzcgNTYuMDQ4NCAyNi42MTQxIDUzLjgyMDkgMzAuNTMxMyA1Mi4yODQ4QzM0LjUyNTMgNTAuNzQ4NiAzOC42MzQ2IDQ5Ljk4MDUgNDIuODU5IDQ5Ljk4MDVDNDYuMDA4MiA0OS45ODA1IDQ5LjAwMzcgNTAuNDAzIDUxLjg0NTYgNTEuMjQ3OUM1NC42ODc1IDUyLjAxNTkgNTcuMjk5IDUzLjEyOTcgNTkuNjggNTQuNTg5QzYyLjEzNzkgNTYuMDQ4NCA2NC4yNTAxIDU3LjgxNSA2Ni4wMTY3IDU5Ljg4ODhMNzMuMTU5OSA1Mi41MTUyQzY5LjcwMzUgNDguNTk4IDY1LjI4NyA0NS41NjQgNTkuOTEwNSA0My40MTM0QzU0LjYxMDcgNDEuMjYyOCA0OC45MjY5IDQwLjE4NzUgNDIuODU5IDQwLjE4NzVDMzcuMDIxNiA0MC4xODc1IDMxLjQ5MTQgNDEuMjYyOCAyNi4yNjg0IDQzLjQxMzRDMjEuMTIyMyA0NS41NjQgMTYuNTUyMiA0OC41OTggMTIuNTU4MiA1Mi41MTUyQzguNjQwOTMgNTYuNDMyNCA1LjU2ODYgNjEuMDAyNSAzLjM0MTE2IDY2LjIyNTVDMS4xMTM3MiA3MS40NDg0IDAgNzcuMTMyMyAwIDgzLjI3NjlDMCA4OS40MjE2IDEuMTEzNzIgOTUuMTA1NCAzLjM0MTE2IDEwMC4zMjhDNS41Njg2IDEwNS41NTEgOC42NDA5MyAxMTAuMTIxIDEyLjU1ODIgMTE0LjAzOUMxNi40NzU0IDExNy45NTYgMjEuMDA3MSAxMjAuOTkgMjYuMTUzMiAxMjMuMTRaTTEwNC4wNTggMTIyLjMzNEMxMDguNTEyIDEyNS4wMjIgMTEzLjU4MiAxMjYuMzY2IDExOS4yNjYgMTI2LjM2NkMxMjUuNzE3IDEyNi4zNjYgMTMxLjEzMiAxMjQuOTA3IDEzNS41MTEgMTIxLjk4OEMxMzkuODg5IDExOS4wNyAxNDMuMjMgMTE1LjM4MyAxNDUuNTM0IDExMC45MjhMMTM2Ljc3OCAxMDYuNzhDMTM1LjE2NSAxMDkuNjk5IDEzMi45MzcgMTEyLjE1NyAxMzAuMDk2IDExNC4xNTRDMTI3LjMzIDExNi4xNTEgMTIzLjg3NCAxMTcuMTQ5IDExOS43MjYgMTE3LjE0OUMxMTYuNSAxMTcuMTQ5IDExMy4zOSAxMTYuMzQzIDExMC4zOTQgMTE0LjczQzEwNy4zOTkgMTEzLjExNyAxMDQuOTQxIDExMC42OTcgMTAzLjAyMSAxMDcuNDcyQzEwMS4zNjIgMTA0LjY4NCAxMDAuNDE5IDEwMS4yNjYgMTAwLjE5NCA5Ny4yMTc2SDE0Ni40NTZDMTQ2LjUzMyA5Ni44MzM2IDE0Ni41NzEgOTYuMzM0MyAxNDYuNTcxIDk1LjcxOTlDMTQ2LjY0OCA5NS4xMDU0IDE0Ni42ODYgOTQuNTI5MyAxNDYuNjg2IDkzLjk5MTdDMTQ2LjY4NiA4OC4xNTQyIDE0NS41MzQgODIuOTY5NyAxNDMuMjMgNzguNDM4QzE0MS4wMDIgNzMuOTA2MyAxMzcuNzc2IDcwLjM3MzEgMTMzLjU1MiA2Ny44Mzg1QzEyOS4zMjcgNjUuMjI3IDEyNC4yOTcgNjMuOTIxMiAxMTguNDU5IDYzLjkyMTJDMTEyLjY5OCA2My45MjEyIDEwNy42NjggNjUuMzgwNiAxMDMuMzY2IDY4LjI5OTNDOTkuMDY1IDcxLjE0MTIgOTUuNzIzOCA3NC45NDMyIDkzLjM0MjggNzkuNzA1M0M5MS4wMzg1IDg0LjQ2NzQgODkuODg2NCA4OS42NTIgODkuODg2NCA5NS4yNTlDODkuODg2NCAxMDEuMjUgOTEuMTE1MyAxMDYuNTg4IDkzLjU3MzIgMTExLjI3NEM5Ni4xMDc5IDExNS45NTkgOTkuNjAyNyAxMTkuNjQ2IDEwNC4wNTggMTIyLjMzNFpNMTAwLjc4MSA4OC44MDcxQzEwMS4xNDMgODcuMDk3MSAxMDEuNjYgODUuNDg0MSAxMDIuMzI5IDgzLjk2ODJDMTAzLjc4OSA4MC42NjU0IDEwNS45MDEgNzguMDU0IDEwOC42NjYgNzYuMTMzOEMxMTEuNTA4IDc0LjEzNjcgMTE0LjgxMSA3My4xMzgyIDExOC41NzQgNzMuMTM4MkMxMjEuNzIzIDczLjEzODIgMTI0LjM3MyA3My42NzU5IDEyNi41MjQgNzQuNzUxMkMxMjguNjc1IDc1Ljc0OTcgMTMwLjQ0MSA3Ny4wNTU0IDEzMS44MjQgNzguNjY4NEMxMzMuMjA2IDgwLjI4MTQgMTM0LjIwNSA4Mi4wMDk2IDEzNC44MTkgODMuODUzQzEzNS40MzQgODUuNjE5NiAxMzUuNzc5IDg3LjI3MSAxMzUuODU2IDg4LjgwNzFIMTAwLjc4MVpNMTU1LjQ5NyA2NS43NjQ2VjEyNC41MjNIMTY1Ljg2NlY5MS44MDI2QzE2NS44NjYgODguNTc2NyAxNjYuNTE5IDg1LjU0MjggMTY3LjgyNSA4Mi43MDA5QzE2OS4xMzEgNzkuODU5IDE3MC45MzYgNzcuNTkzMSAxNzMuMjQgNzUuOTAzM0MxNzUuNTQ0IDc0LjEzNjcgMTc4LjE1NiA3My4yNTM0IDE4MS4wNzQgNzMuMjUzNEMxODUuMTQ1IDczLjI1MzQgMTg4LjI5NCA3NC40NDQgMTkwLjUyMiA3Ni44MjVDMTkyLjgyNiA3OS4xMjkzIDE5My45NzggODMuMDg0OSAxOTMuOTc4IDg4LjY5MTlWMTI0LjUyM0gyMDQuMjMyVjkxLjU3MjJDMjA0LjIzMiA4OC4zNDYzIDIwNC44ODUgODUuMzUwNyAyMDYuMTkxIDgyLjU4NTZDMjA3LjQ5NiA3OS43NDM3IDIwOS4zMDEgNzcuNDc3OSAyMTEuNjA2IDc1Ljc4ODFDMjEzLjkxIDc0LjA5ODMgMjE2LjUyMSA3My4yNTM0IDIxOS40NCA3My4yNTM0QzIyMy41ODggNzMuMjUzNCAyMjYuNzc1IDc0LjQwNTYgMjI5LjAwMyA3Ni43MDk4QzIzMS4zMDcgNzkuMDE0MSAyMzIuNDU5IDgyLjk2OTcgMjMyLjQ1OSA4OC41NzY3VjEyNC41MjNIMjQyLjcxM1Y4Ni44NDg1QzI0Mi43MTMgODAuMDEyNiAyNDEuMDIzIDc0LjQ4MjQgMjM3LjY0NCA3MC4yNTc5QzIzNC4zNDEgNjYuMDMzNSAyMjkuMTU2IDYzLjkyMTIgMjIyLjA5IDYzLjkyMTJDMjE3LjQwNSA2My45MjEyIDIxMy4zNzIgNjQuOTk2NSAyMDkuOTkzIDY3LjE0NzJDMjA2LjYxMyA2OS4yOTc4IDIwMy45MjUgNzIuMDI0NSAyMDEuOTI4IDc1LjMyNzNDMjAwLjU0NSA3MS45NDc3IDE5OC4yNzkgNjkuMjIxIDE5NS4xMyA2Ny4xNDcyQzE5Mi4wNTggNjQuOTk2NSAxODguMzMzIDYzLjkyMTIgMTgzLjk1NSA2My45MjEyQzE4MS40OTcgNjMuOTIxMiAxNzkuMDM5IDY0LjQyMDUgMTc2LjU4MSA2NS40MTlDMTc0LjIgNjYuMzQwNyAxNzIuMDg4IDY3LjYwOCAxNzAuMjQ0IDY5LjIyMUMxNjguNDAxIDcwLjc1NzIgMTY2Ljk0MiA3Mi40ODU0IDE2NS44NjYgNzQuNDA1NkgxNjUuNDA1VjY1Ljc2NDZIMTU1LjQ5N1pNMjUyLjA0NSA2NS43NjQ2VjEyNC41MjNIMjYyLjI5OVY2NS43NjQ2SDI1Mi4wNDVaTTI1MS45MyA1My4zMjE3QzI1My4zODkgNTQuNzA0MiAyNTUuMTE4IDU1LjM5NTUgMjU3LjExNSA1NS4zOTU1QzI1OS4xODggNTUuMzk1NSAyNjAuOTE3IDU0LjcwNDIgMjYyLjI5OSA1My4zMjE3QzI2My42ODIgNTEuODYyMyAyNjQuMzczIDUwLjEzNDEgMjY0LjM3MyA0OC4xMzcxQzI2NC4zNzMgNDYuMDYzMyAyNjMuNjgyIDQ0LjMzNTEgMjYyLjI5OSA0Mi45NTI2QzI2MC45MTcgNDEuNDkzMiAyNTkuMTg4IDQwLjc2MzUgMjU3LjExNSA0MC43NjM1QzI1NS4xMTggNDAuNzYzNSAyNTMuMzg5IDQxLjQ5MzIgMjUxLjkzIDQyLjk1MjZDMjUwLjU0NyA0NC4zMzUxIDI0OS44NTYgNDYuMDYzMyAyNDkuODU2IDQ4LjEzNzFDMjQ5Ljg1NiA1MC4xMzQxIDI1MC41NDcgNTEuODYyMyAyNTEuOTMgNTMuMzIxN1pNMjcxLjkyOSA2NS43NjQ2VjEyNC41MjNIMjgyLjI5OFY5MS44MDI2QzI4Mi4yOTggODguNjUzNSAyODIuOTUxIDg1LjY5NjQgMjg0LjI1NyA4Mi45MzEzQzI4NS42NCA4MC4wODk0IDI4Ny41MjEgNzcuNzg1MSAyODkuOTAyIDc2LjAxODVDMjkyLjI4MyA3NC4xNzUxIDI5NS4wODcgNzMuMjUzNCAyOTguMzEzIDczLjI1MzRDMzAyLjYxNCA3My4yNTM0IDMwNi4wNzEgNzQuNDQ0IDMwOC42ODIgNzYuODI1QzMxMS4yOTMgNzkuMTI5MyAzMTIuNTk5IDgzLjA4NDkgMzEyLjU5OSA4OC42OTE5VjEyNC41MjNIMzIyLjk2OFY4Ni44NDg1QzMyMi45NjggNzkuOTM1OCAzMjEuMTI1IDc0LjQwNTYgMzE3LjQzOCA3MC4yNTc5QzMxMy43NTEgNjYuMDMzNSAzMDguMzM2IDYzLjkyMTIgMzAxLjE5MyA2My45MjEyQzI5Ni45NjkgNjMuOTIxMiAyOTMuMTI4IDY0Ljk1ODEgMjg5LjY3MiA2Ny4wMzJDMjg2LjIxNiA2OS4xMDU4IDI4My43MTkgNzEuNTYzNyAyODIuMTgzIDc0LjQwNTZIMjgxLjcyMlY2NS43NjQ2SDI3MS45MjlaTTMzMS42NzIgNjUuNzY0NlYxMjQuNTIzSDM0MS45MjZWNjUuNzY0NkgzMzEuNjcyWk0zMzEuNTU3IDUzLjMyMTdDMzMzLjAxNiA1NC43MDQyIDMzNC43NDUgNTUuMzk1NSAzMzYuNzQyIDU1LjM5NTVDMzM4LjgxNSA1NS4zOTU1IDM0MC41NDQgNTQuNzA0MiAzNDEuOTI2IDUzLjMyMTdDMzQzLjMwOSA1MS44NjIzIDM0NCA1MC4xMzQxIDM0NCA0OC4xMzcxQzM0NCA0Ni4wNjMzIDM0My4zMDkgNDQuMzM1MSAzNDEuOTI2IDQyLjk1MjZDMzQwLjU0NCA0MS40OTMyIDMzOC44MTUgNDAuNzYzNSAzMzYuNzQyIDQwLjc2MzVDMzM0Ljc0NSA0MC43NjM1IDMzMy4wMTYgNDEuNDkzMiAzMzEuNTU3IDQyLjk1MjZDMzMwLjE3NSA0NC4zMzUxIDMyOS40ODMgNDYuMDYzMyAzMjkuNDgzIDQ4LjEzNzFDMzI5LjQ4MyA1MC4xMzQxIDMzMC4xNzUgNTEuODYyMyAzMzEuNTU3IDUzLjMyMTdaIiBmaWxsPSJ3aGl0ZSIvPgo8L21hc2s+CjxnIG1hc2s9InVybCgjbWFzazBfOTU4XzE1ODgxKSI+CjxyZWN0IHg9Ii0xNTguMjUiIHk9Ii00NTUuNDQzIiB3aWR0aD0iODMyLjA5IiBoZWlnaHQ9IjY4NS4zMjQiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl85NThfMTU4ODEpIi8+CjwvZz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQwX2xpbmVhcl85NThfMTU4ODEiIHgxPSItNTcuNDA0OSIgeTE9IjEzMC40NDEiIHgyPSIzNTQuOTciIHkyPSIzMC4zNjkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzQzOURERiIvPgo8c3RvcCBvZmZzZXQ9IjAuNTI0MjA4IiBzdG9wLWNvbG9yPSIjNEY4N0VEIi8+CjxzdG9wIG9mZnNldD0iMC43ODE0NTIiIHN0b3AtY29sb3I9IiM5NDc2QzUiLz4KPHN0b3Agb2Zmc2V0PSIwLjg4ODI1MiIgc3RvcC1jb2xvcj0iI0JDNjg4RSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNENjY0NUQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K" alt="">
+        <div class="agent-name">News &amp; Sentiment</div>
+        <div class="agent-model">Gemini 2.5 Pro</div>
+        <div class="agent-role">Breaking news, social pulse</div>
+      </div>
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/png;base64,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" alt="">
+        <div class="agent-name">Calendar Agent</div>
+        <div class="agent-model">DeepSeek R1</div>
+        <div class="agent-role">Earnings, events, catalysts</div>
+      </div>
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsgZmlsbDogI2RhNzc1NjsgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPCEtLSA0IHJvdW5kZWQgYmFycyByb3RhdGVkIHRvIGZvcm0gOC1wb2ludGVkIHN0YXIgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTAsNTApIj4KICAgIDwhLS0gVmVydGljYWwgLS0+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiBjbGFzcz0iY2xzLTEiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDkwKSIgY2xhc3M9ImNscy0xIi8+CiAgICA8IS0tIERpYWdvbmFscyAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDQ1KSIgY2xhc3M9ImNscy0xIi8+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiB0cmFuc2Zvcm09InJvdGF0ZSgxMzUpIiBjbGFzcz0iY2xzLTEiLz4KICA8L2c+Cjwvc3ZnPg==" alt="">
+        <div class="agent-name">Bull Researcher</div>
+        <div class="agent-model">Claude Opus 4.6</div>
+        <div class="agent-role">Argues FOR the trade</div>
+      </div>
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjQwNiAyNDA2Ij4KCTxwYXRoIGQ9Ik0xIDU3OC40QzEgMjU5LjUgMjU5LjUgMSA1NzguNCAxaDEyNDkuMWMzMTkgMCA1NzcuNSAyNTguNSA1NzcuNSA1NzcuNFYyNDA2SDU3OC40QzI1OS41IDI0MDYgMSAyMTQ3LjUgMSAxODI4LjZWNTc4LjR6IiBmaWxsPSIjNzRhYTljIi8+Cgk8cGF0aCBpZD0iYSIgZD0iTTExMDcuMyAyOTkuMWMtMTk3Ljk5OSAwLTM3My45IDEyNy4zLTQzNS4yIDMxNS4zTDY1MCA3NDMuNXY0MjcuOWMwIDIxLjQgMTEgNDAuNCAyOS40IDUxLjRsMzQ0LjUgMTk4LjUxNVY4MzMuM2guMXYtMjcuOUwxMzcyLjcgNjA0YzMzLjcxNS0xOS41MiA3MC40NC0zMi44NTcgMTA4LjQ3LTM5LjgyOEwxNDQ3LjYgNDUwLjNDMTM2MSAzNTMuNSAxMjM3LjEgMjk4LjUgMTEwNy4zIDI5OS4xem0wIDExNy41LS42LjZjNzkuNjk5IDAgMTU2LjMgMjcuNSAyMTcuNiA3OC40LTIuNSAxLjItNy40IDQuMy0xMSA2LjFMOTUyLjggNzA5LjNjLTE4LjQgMTAuNC0yOS40IDMwLTI5LjQgNTEuNFYxMjQ4bC0xNTUuMS04OS40Vjc1NS44Yy0uMS0xODcuMDk5IDE1MS42MDEtMzM4LjkgMzM5LTMzOS4yeiIgZmlsbD0iI2ZmZiIvPgoJPHVzZSB4bGluazpocmVmPSIjYSIgdHJhbnNmb3JtPSJyb3RhdGUoNjAgMTIwMyAxMjAzKSIvPgogIAk8dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjAgMTIwMyAxMjAzKSIvPgoJPHVzZSB4bGluazpocmVmPSIjYSIgdHJhbnNmb3JtPSJyb3RhdGUoMTgwIDEyMDMgMTIwMykiLz4KCTx1c2UgeGxpbms6aHJlZj0iI2EiIHRyYW5zZm9ybT0icm90YXRlKDI0MCAxMjAzIDEyMDMpIi8+Cgk8dXNlIHhsaW5rOmhyZWY9IiNhIiB0cmFuc2Zvcm09InJvdGF0ZSgzMDAgMTIwMyAxMjAzKSIvPgoKPC9zdmc+" alt="">
+        <div class="agent-name">Bear Researcher</div>
+        <div class="agent-model">GPT-4o</div>
+        <div class="agent-role">Argues AGAINST the trade</div>
+      </div>
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsgZmlsbDogI2RhNzc1NjsgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPCEtLSA0IHJvdW5kZWQgYmFycyByb3RhdGVkIHRvIGZvcm0gOC1wb2ludGVkIHN0YXIgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTAsNTApIj4KICAgIDwhLS0gVmVydGljYWwgLS0+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiBjbGFzcz0iY2xzLTEiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDkwKSIgY2xhc3M9ImNscy0xIi8+CiAgICA8IS0tIERpYWdvbmFscyAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDQ1KSIgY2xhc3M9ImNscy0xIi8+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiB0cmFuc2Zvcm09InJvdGF0ZSgxMzUpIiBjbGFzcz0iY2xzLTEiLz4KICA8L2c+Cjwvc3ZnPg==" alt="">
+        <div class="agent-name">Risk Manager</div>
+        <div class="agent-model">Claude Sonnet</div>
+        <div class="agent-role">Portfolio constraints &amp; sizing</div>
+      </div>
+      <div class="agent-card">
+        <img class="agent-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsgZmlsbDogI2RhNzc1NjsgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPCEtLSA0IHJvdW5kZWQgYmFycyByb3RhdGVkIHRvIGZvcm0gOC1wb2ludGVkIHN0YXIgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTAsNTApIj4KICAgIDwhLS0gVmVydGljYWwgLS0+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiBjbGFzcz0iY2xzLTEiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDkwKSIgY2xhc3M9ImNscy0xIi8+CiAgICA8IS0tIERpYWdvbmFscyAtLT4KICAgIDxyZWN0IHg9Ii04IiB5PSItNDUiIHdpZHRoPSIxNiIgaGVpZ2h0PSI5MCIgcng9IjgiIHRyYW5zZm9ybT0icm90YXRlKDQ1KSIgY2xhc3M9ImNscy0xIi8+CiAgICA8cmVjdCB4PSItOCIgeT0iLTQ1IiB3aWR0aD0iMTYiIGhlaWdodD0iOTAiIHJ4PSI4IiB0cmFuc2Zvcm09InJvdGF0ZSgxMzUpIiBjbGFzcz0iY2xzLTEiLz4KICA8L2c+Cjwvc3ZnPg==" alt="">
+        <div class="agent-name">Trader (CIO)</div>
+        <div class="agent-model">Claude Opus 4.6</div>
+        <div class="agent-role">Final decision authority</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIX RISK PROFILES -->
+  <div class="section">
+    <div class="section-label">Profiles</div>
+    <div class="section-title">Six Trading Profiles</div>
+    <div class="section-subtitle">From conservative decade-long wealth building to ultra-aggressive micro-cap pump detection &mdash; each profile runs its own engine, risk model, and brokerage account.</div>
+
+    <div class="profiles-grid">
+      <div class="profile-card p-apex">
+        <span class="profile-emoji">&#128142;</span>
+        <div class="profile-name">APEX Elite</div>
+        <div class="profile-style">Multi-Strategy Rotation &bull; Python Gatekeeper &bull; Backtest-Validated</div>
+        <div class="profile-metrics">
+          <div><div class="pm-value">57&times;</div><div class="pm-label">7yr Return</div></div>
+          <div><div class="pm-value">78%</div><div class="pm-label">CAGR</div></div>
+          <div><div class="pm-value">1.27</div><div class="pm-label">Sharpe</div></div>
+          <div><div class="pm-value">7/7</div><div class="pm-label">Win Years</div></div>
+        </div>
+      </div>
+
+      <div class="profile-card p-aggressive">
+        <span class="profile-emoji">&#128293;</span>
+        <div class="profile-name">Aggressive</div>
+        <div class="profile-style">Momentum Breakouts &bull; Graduated Regime Gate &bull; Kill Zones</div>
+        <div class="profile-metrics">
+          <div><div class="pm-value">Day</div><div class="pm-label">Hold Period</div></div>
+          <div><div class="pm-value">5</div><div class="pm-label">Max Positions</div></div>
+          <div><div class="pm-value">A/B</div><div class="pm-label">Catalyst Grade</div></div>
+          <div><div class="pm-value">3%</div><div class="pm-label">Daily Loss Cap</div></div>
+        </div>
+      </div>
+
+      <div class="profile-card p-pdh">
+        <span class="profile-emoji">&#128163;</span>
+        <div class="profile-name">Pump &amp; Dump Hunter</div>
+        <div class="profile-style">6-Detector Scoring &bull; Cash-Governed Entry &bull; Drop-to-Upgrade</div>
+        <div class="profile-metrics">
+          <div><div class="pm-value">6</div><div class="pm-label">Detectors</div></div>
+          <div><div class="pm-value">25/35%</div><div class="pm-label">Exposure Tiers</div></div>
+          <div><div class="pm-value">85+</div><div class="pm-label">Composite Entry</div></div>
+          <div><div class="pm-value">10%</div><div class="pm-label">Daily Loss Cap</div></div>
+        </div>
+      </div>
+
+      <div class="profile-card p-ross">
+        <span class="profile-emoji">&#9889;</span>
+        <div class="profile-name">Ross Cameron</div>
+        <div class="profile-style">Small-Cap Momentum &bull; First Hour Only &bull; Pattern Detection</div>
+        <div class="profile-metrics">
+          <div><div class="pm-value">3</div><div class="pm-label">Max Trades/Day</div></div>
+          <div><div class="pm-value">60m</div><div class="pm-label">Entry Window</div></div>
+          <div><div class="pm-value">LONG</div><div class="pm-label">Direction</div></div>
+          <div><div class="pm-value">6%</div><div class="pm-label">Daily Loss Cap</div></div>
+        </div>
+      </div>
+
+      <div class="profile-card p-moderate">
+        <span class="profile-emoji">&#9878;&#65039;</span>
+        <div class="profile-name">Moderate</div>
+        <div class="profile-style">Quality-Momentum &bull; Core + Satellite &bull; Covered Calls</div>
+        <div class="profile-metrics">
+          <div><div class="pm-value">12</div><div class="pm-label">Max Positions</div></div>
+          <div><div class="pm-value">Days</div><div class="pm-label">Hold Period</div></div>
+          <div><div class="pm-value">65/35</div><div class="pm-label">Core / Satellite</div></div>
+          <div><div class="pm-value">8%</div><div class="pm-label">Max Per Stock</div></div>
+        </div>
+      </div>
+
+      <div class="profile-card p-conservative">
+        <span class="profile-emoji">&#127961;&#65039;</span>
+        <div class="profile-name">Conservative</div>
+        <div class="profile-style">Dividend Aristocrats &bull; Capital Preservation &bull; 25+ Year Streaks</div>
+        <div class="profile-metrics">
+          <div><div class="pm-value">15</div><div class="pm-label">Max Positions</div></div>
+          <div><div class="pm-value">Years</div><div class="pm-label">Hold Period</div></div>
+          <div><div class="pm-value">85/15</div><div class="pm-label">Core / Satellite</div></div>
+          <div><div class="pm-value">5%</div><div class="pm-label">Max Per Stock</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APEX ELITE ENGINE -->
+  <div class="section">
+    <div class="section-label">Fast Lane</div>
+    <div class="section-title">APEX Elite Engine</div>
+    <div class="section-subtitle">The crown jewel of the Fast Lane &mdash; APEX runs a multi-strategy state machine where a Python gatekeeper selects the optimal strategy in &lt;10ms based on regime, time window, and VIX. Parameters validated across 38,284 backtests and 10,371 trades.</div>
+
+    <div class="apex-hero">
+      <div class="apex-header">
+        <div class="apex-title-group">
+          <h3>6 Adaptive Strategies</h3>
+          <p>APEX selects from 6 strategies via a data-driven condition map built from 1.69 million analyzed trades. 3 strategies are currently active (proven edge), 3 are disabled (unprofitable in out-of-sample testing).</p>
+        </div>
+        <div class="apex-badge">APEX ELITE</div>
+      </div>
+
+      <div class="strategies-grid">
+        <div class="strategy-card">
+          <div class="strategy-name">VWAP Mean Reversion</div>
+          <div class="strategy-meta">
+            <span class="dir-long">&#9650; Long</span>
+            <span>PF 1.275 &bull; 55% WR</span>
+          </div>
+        </div>
+        <div class="strategy-card">
+          <div class="strategy-name">Lunch Range Reversion</div>
+          <div class="strategy-meta">
+            <span class="dir-long">&#9650; Long</span>
+            <span>PF 1.637 &bull; 60% WR</span>
+          </div>
+        </div>
+        <div class="strategy-card">
+          <div class="strategy-name">Power Hour Continuation</div>
+          <div class="strategy-meta">
+            <span class="dir-long">&#9650; Long</span>
+            <span>PF 2.5+ &bull; Crisis Only</span>
+          </div>
+        </div>
+        <div class="strategy-card strategy-disabled">
+          <div class="strategy-name">Gap &amp; Go</div>
+          <div class="strategy-meta">
+            <span class="dir-long">&#9650; Long</span>
+            <span>Disabled &bull; PF 0.026</span>
+          </div>
+        </div>
+        <div class="strategy-card strategy-disabled">
+          <div class="strategy-name">Opening Range Breakout</div>
+          <div class="strategy-meta">
+            <span class="dir-long">&#9650; Long</span>
+            <span>Disabled &bull; PF 0.944</span>
+          </div>
+        </div>
+        <div class="strategy-card strategy-disabled">
+          <div class="strategy-name">Breakdown Short</div>
+          <div class="strategy-meta">
+            <span class="dir-short">&#9660; Short</span>
+            <span>Disabled &bull; PF 0.73</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div class="section">
+    <div class="section-label">Analytics</div>
+    <div class="section-title">Institutional-Grade Analytics</div>
+    <div class="section-subtitle">The system ingests data that most retail investors never see &mdash; dark pool prints, Level 3 options flow, institutional order flow, and social sentiment &mdash; all scored and fed into the decision engine.</div>
+
+    <div class="analytics-grid">
+      <div class="analytics-card">
+        <div class="analytics-icon">&#128373;&#65039;</div>
+        <div class="analytics-title">Dark Pool Detection</div>
+        <div class="analytics-desc">Detects large institutional block trades hidden from public exchanges. Unusual dark pool volume signals smart money positioning.</div>
+        <div class="analytics-tags"><span>Theta Terminal</span><span>Block Trades</span><span>Hidden Flow</span></div>
+      </div>
+      <div class="analytics-card">
+        <div class="analytics-icon">&#128202;</div>
+        <div class="analytics-title">Options GEX + Max Pain</div>
+        <div class="analytics-desc">Gamma Exposure analysis reveals where market makers must hedge. Max pain identifies the price where most options expire worthless.</div>
+        <div class="analytics-tags"><span>GEX</span><span>Max Pain</span><span>Put/Call OI</span></div>
+      </div>
+      <div class="analytics-card">
+        <div class="analytics-icon">&#127919;</div>
+        <div class="analytics-title">Confluence Scoring</div>
+        <div class="analytics-desc">Weighted multi-factor entry quality scoring. Combines technicals, flow, volume, and catalyst strength into a single 0-100 confidence score.</div>
+        <div class="analytics-tags"><span>Weighted Scoring</span><span>Entry Quality</span></div>
+      </div>
+      <div class="analytics-card">
+        <div class="analytics-icon">&#128209;</div>
+        <div class="analytics-title">6-Detector Pump Scoring</div>
+        <div class="analytics-desc">Volume spike, price velocity, social mentions, unusual options, low float, and SEC filing signals. Composite 0-100 score with detector-level weighting.</div>
+        <div class="analytics-tags"><span>Volume Z-Score</span><span>Social</span><span>Options Flow</span><span>Float</span></div>
+      </div>
+      <div class="analytics-card">
+        <div class="analytics-icon">&#128176;</div>
+        <div class="analytics-title">Unusual Whales + Social</div>
+        <div class="analytics-desc">Real-time dark pool alerts, options flow discovery, StockTwits buzz, Finnhub news, Quiver Quant WSB tracking, and Twitter pump-language detection.</div>
+        <div class="analytics-tags"><span>UW</span><span>StockTwits</span><span>Finnhub</span><span>Twitter</span></div>
+      </div>
+      <div class="analytics-card">
+        <div class="analytics-icon">&#128300;</div>
+        <div class="analytics-title">Counterfactual Tracking</div>
+        <div class="analytics-desc">Records every blocked signal with entry price, then tracks hypothetical outcomes at 30, 60, 120 minutes and EOD. Data-driven validation of whether blocks were correct.</div>
+        <div class="analytics-tags"><span>What-If Analysis</span><span>Signal Validation</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGIME DETECTION -->
+  <div class="section">
+    <div class="section-label">Risk</div>
+    <div class="section-title">Graduated Regime Detection</div>
+    <div class="section-subtitle">The single most important innovation &mdash; don't trade in bad markets. The graduated gate evaluates catalyst quality and confluence score to allow high-quality setups through in YELLOW at reduced size, while blocking everything in RED.</div>
+
+    <div class="regime-grid">
+      <div class="regime-card green">
+        <span class="regime-emoji">&#127793;</span>
+        <div class="regime-name">GREEN</div>
+        <div class="regime-trigger">VIX &lt; 25 AND SPY above 50MA &amp; 200MA</div>
+        <div class="regime-action">ALL STRATEGIES &bull; 1.0&times; SIZE</div>
+      </div>
+      <div class="regime-card yellow">
+        <span class="regime-emoji">&#9888;&#65039;</span>
+        <div class="regime-name">YELLOW</div>
+        <div class="regime-trigger">VIX 25-35 OR SPY below 50MA. Graduated gate: A-grade + confluence &ge;70 = 0.75&times;, B-grade + &ge;50 = 0.25&times;</div>
+        <div class="regime-action">QUALITY-GATED &bull; 0.25-0.75&times;</div>
+      </div>
+      <div class="regime-card red">
+        <span class="regime-emoji">&#128308;</span>
+        <div class="regime-name">RED</div>
+        <div class="regime-trigger">VIX &gt; 35 OR SPY below 200MA</div>
+        <div class="regime-action">ALL BLOCKED</div>
+      </div>
+      <div class="regime-card cb">
+        <span class="regime-emoji">&#128680;</span>
+        <div class="regime-name">CIRCUIT BREAKER</div>
+        <div class="regime-trigger">Daily or weekly loss limit hit. Progressive risk reduction, then full halt.</div>
+        <div class="regime-action">EMERGENCY HALT</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKTEST PERFORMANCE -->
+  <div class="section">
+    <div class="section-label">Performance</div>
+    <div class="section-title">Backtest-Validated Performance</div>
+    <div class="section-subtitle">APEX parameters validated across a 60-configuration parameter sweep with 38,284 backtests and 10,371 trades. Scoring 5.0 out of 6 ROBUST on the walk-forward efficiency framework.</div>
+
+    <div class="perf-table-wrap">
+      <table class="perf-table">
+        <thead>
+          <tr><th>Metric</th><th>Value</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="metric-name">Starting Capital</td><td class="val-blue">$500</td><td>Minimum viable starting capital</td></tr>
+          <tr><td class="metric-name">Final Equity (7yr)</td><td class="val-green">$33,703</td><td>57&times; return — $500 to $33.7K</td></tr>
+          <tr><td class="metric-name">CAGR</td><td class="val-green">78%</td><td>37% excluding 2022 outlier year</td></tr>
+          <tr><td class="metric-name">Sharpe Ratio</td><td class="val-green">1.27</td><td>Above 1.0 = institutional grade</td></tr>
+          <tr><td class="metric-name">Profit Factor</td><td class="val-green">1.275</td><td>Gross profit / gross loss</td></tr>
+          <tr><td class="metric-name">Win Rate</td><td class="val-green">55%</td><td>Across 10,371 validated trades</td></tr>
+          <tr><td class="metric-name">Profitable Years</td><td class="val-green">7 / 7</td><td>100% — every year profitable</td></tr>
+          <tr><td class="metric-name">Max Drawdown</td><td class="val-red">-32%</td><td>Worst peak-to-trough decline</td></tr>
+          <tr><td class="metric-name">Walk-Forward Efficiency</td><td class="val-blue">1.27</td><td>&gt;0.5 = robust, not overfit</td></tr>
+          <tr><td class="metric-name">Monte Carlo P46</td><td class="val-green">Positive</td><td>46th percentile still profitable</td></tr>
+          <tr><td class="metric-name">Ruin Probability</td><td class="val-green">0%</td><td>Zero probability of account wipeout</td></tr>
+          <tr><td class="metric-name">Overall Score</td><td class="val-green">5.0 / 6</td><td>ROBUST classification</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SELF-LEARNING SYSTEM -->
+  <div class="section">
+    <div class="section-label">Learning</div>
+    <div class="section-title">Self-Learning Feedback Loop</div>
+    <div class="section-subtitle">Every trade is analyzed, scored, and fed back into the system. The engine auto-tunes its own parameters through reinforcement learning and postmortem analysis.</div>
+
+    <div class="flow-pipeline">
+      <div class="flow-node"><span class="flow-node-icon">&#128221;</span><div class="flow-node-title">Trade Logger</div><div class="flow-node-time">Real-time</div></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node"><span class="flow-node-icon">&#129504;</span><div class="flow-node-title">Layered Memory</div><div class="flow-node-time">FinMem 3-tier</div></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node"><span class="flow-node-icon">&#128270;</span><div class="flow-node-title">Postmortem</div><div class="flow-node-time">End of day</div></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node"><span class="flow-node-icon">&#128200;</span><div class="flow-node-title">Reinforcement</div><div class="flow-node-time">VRL scoring</div></div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node"><span class="flow-node-icon">&#9881;&#65039;</span><div class="flow-node-title">Optimization</div><div class="flow-node-time">Auto-tune</div></div>
+    </div>
+  </div>
+
+  <!-- COMPARISON -->
+  <div class="section">
+    <div class="section-label">Comparison</div>
+    <div class="section-title">What Sets Nexus Apart</div>
+    <div class="section-subtitle">Institutional-grade capabilities typically reserved for hedge funds, accessible to an individual investor.</div>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-title">Typical Retail Systems</div>
+        <ul class="compare-list">
+          <li><span class="x-icon">&#10007;</span> Single algorithm, one-size-fits-all</li>
+          <li><span class="x-icon">&#10007;</span> No debate or second opinion</li>
+          <li><span class="x-icon">&#10007;</span> Static rules, no learning</li>
+          <li><span class="x-icon">&#10007;</span> No risk profile customization</li>
+          <li><span class="x-icon">&#10007;</span> No position sizing by volatility</li>
+          <li><span class="x-icon">&#10007;</span> Manual trade execution</li>
+          <li><span class="x-icon">&#10007;</span> No dark pool or options flow data</li>
+        </ul>
+      </div>
+      <div class="compare-card nexus">
+        <div class="compare-title" style="color: var(--accent-green);">Nexus Investing</div>
+        <ul class="compare-list">
+          <li><span class="check-icon">&#10003;</span> 8 specialized AI agents collaborate on every trade</li>
+          <li><span class="check-icon">&#10003;</span> Bull vs Bear adversarial debate built in</li>
+          <li><span class="check-icon">&#10003;</span> Self-learning feedback loop after every trade</li>
+          <li><span class="check-icon">&#10003;</span> 6 distinct profiles with tailored strategies</li>
+          <li><span class="check-icon">&#10003;</span> VIX-based dynamic sizing + graduated regime gate</li>
+          <li><span class="check-icon">&#10003;</span> Fully autonomous execution across 6 accounts</li>
+          <li><span class="check-icon">&#10003;</span> Dark pool, GEX, options flow, social sentiment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFRASTRUCTURE -->
+  <div class="section">
+    <div class="section-label">Infrastructure</div>
+    <div class="section-title">Production Infrastructure</div>
+    <div class="section-subtitle">Multi-broker execution, real-time data feeds, fault-tolerant state management, and a Streamlit command dashboard.</div>
+
+    <div class="infra-grid">
+      <div class="infra-card">
+        <h4>&#128279; Multi-Broker</h4>
+        <p>Alpaca (US), Questrade (CAD), and IBKR support via broker abstraction layer. Profile-isolated credentials across 6 accounts.</p>
+        <div class="infra-stat">3 broker adapters &bull; 6 accounts</div>
+      </div>
+      <div class="infra-card">
+        <h4>&#128200; Market Data</h4>
+        <p>FMP primary data source with yFinance fallback. Theta Terminal for real-time options flow and dark pool data. Unusual Whales for flow discovery.</p>
+        <div class="infra-stat">4+ data providers</div>
+      </div>
+      <div class="infra-card">
+        <h4>&#128274; Risk Controls</h4>
+        <p>Circuit breaker with file-persisted state. Daily, weekly, and monthly loss limits. Progressive risk reduction on drawdowns. Per-profile isolation.</p>
+        <div class="infra-stat">4-tier loss limits</div>
+      </div>
+      <div class="infra-card">
+        <h4>&#128190; State &amp; Signal Bus</h4>
+        <p>Redis Streams for real-time inter-engine communication (&lt;5ms latency). JSON file fallback for persistence. 30-second broker reconciliation loop.</p>
+        <div class="infra-stat">Redis Streams + JSON fallback</div>
+      </div>
+      <div class="infra-card">
+        <h4>&#128202; Trade Analytics</h4>
+        <p>Institutional-grade metrics: Sharpe, Sortino, Calmar, Max Drawdown, Profit Factor, Expectancy. Equity curve charts, benchmark comparison (Alpha, Beta vs SPY).</p>
+        <div class="infra-stat">CAPM-based benchmarking</div>
+      </div>
+      <div class="infra-card">
+        <h4>&#128640; Captain's View Dashboard</h4>
+        <p>3&times;2 grid overview of all 6 accounts at a glance. Equity, daily P&L, positions, engine status. One-click navigation to any profile. Auto-refreshes every 30 seconds.</p>
+        <div class="infra-stat">Streamlit &bull; Dark Theme</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="section">
+    <div class="section-label">Stack</div>
+    <div class="section-title">Technology Stack</div>
+    <div class="section-subtitle">Built on proven technologies and industry-standard APIs.</div>
+
+    <div class="tech-grid">
+      <div class="tech-chip"><div><div class="tech-name">Python</div><div class="tech-role">Core Engine</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">LangGraph</div><div class="tech-role">Agent Orchestration</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Streamlit</div><div class="tech-role">Dashboard UI</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Redis 7</div><div class="tech-role">Signal Bus</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">TimescaleDB</div><div class="tech-role">Time-Series DB</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Docker</div><div class="tech-role">Containerization</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">FMP API</div><div class="tech-role">Market Data</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Theta Data</div><div class="tech-role">Options / Dark Pool</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Unusual Whales</div><div class="tech-role">Flow Discovery</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Alpaca</div><div class="tech-role">Broker &amp; Execution</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Questrade</div><div class="tech-role">Broker (CA)</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">IBKR</div><div class="tech-role">Broker (Global)</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">GPT-4o</div><div class="tech-role">OpenAI</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Claude Opus 4.6</div><div class="tech-role">Anthropic</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">Gemini 2.5 Pro</div><div class="tech-role">Google</div></div></div>
+      <div class="tech-chip"><div><div class="tech-name">DeepSeek R1</div><div class="tech-role">DeepSeek</div></div></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">Nexus Investing</div>
+    <div class="footer-sub">Autonomous AI-Powered Trading System &bull; February 2026</div>
+    <div class="footer-contact">
+      <a href="mailto:Lokindergill@gmail.com">Lokindergill@gmail.com</a>
+      <span class="footer-divider">|</span>
+      <a href="https://www.linkedin.com/in/lokindergill" target="_blank">linkedin.com/in/lokindergill</a>
+    </div>
+    <div class="footer-legal">
+      <strong>Legal Disclosure &amp; Risk Acknowledgment</strong><br><br>
+      <strong>Nature of Service:</strong> Nexus Investing is a technological research platform utilizing probabilistic multi-agent modeling. The AI Council and all associated data outputs are generated through an ensemble of Large Language Models and data-driven simulations. These results are provided for informational and educational purposes only and do not constitute professional financial, investment, legal, or tax advice.<br><br>
+      <strong>No Professional Fiduciary:</strong> Nexus Investing is not a registered investment advisor, broker-dealer, or financial institution. All comparative performance metrics are theoretical design objectives based on backtested logic and do not guarantee future returns.<br><br>
+      <strong>Technological &amp; Execution Risk:</strong> Autonomous trading involves significant risk of capital loss. Users acknowledge that algorithmic systems are subject to market volatility, API latency, and potential model reasoning errors. You retain 100% responsibility for your own capital. Never invest capital you cannot afford to lose.
+    </div>
+    <div class="footer-copy">
+      Copyright &copy; 2026 Nexus Investing. All Rights Reserved.<br>
+      <i>Confidential &amp; Proprietary &mdash; Not for distribution without authorization.</i>
+    </div>
+  </div>
+
+</div><!-- .page -->
+
 </body>
 </html>
