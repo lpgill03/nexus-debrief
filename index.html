@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Investing &mdash; Documentation Portal</title>
+  <title>Nexus Investing</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -19,11 +19,11 @@
       --cyan: #22d3ee;
       --green: #34d399;
       --purple: #a78bfa;
-      --pink: #f472b6;
       --amber: #fbbf24;
-      --red: #f87171;
+      --pink: #f472b6;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { height: 100%; }
     body {
       font-family: 'Outfit', sans-serif;
       background: var(--bg);
@@ -32,7 +32,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 48px 24px 40px;
+      justify-content: center;
+      padding: 40px 24px;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
@@ -47,39 +48,40 @@
     }
     .container { max-width: 740px; width: 100%; position: relative; z-index: 1; }
 
-    /* ═══════ HERO ═══════ */
-    .hero { text-align: center; margin-bottom: 52px; }
-    .logo-wrap {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 96px; height: 96px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 22px; margin-bottom: 28px;
-      animation: glow 4s ease-in-out infinite;
-    }
-    .logo-wrap svg { width: 60px; height: 60px; fill: var(--blue); }
+    /* ═══════ ANIMATIONS ═══════ */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes glow {
       0%, 100% { box-shadow: 0 0 30px rgba(56,189,248,0.08); }
       50% { box-shadow: 0 0 60px rgba(56,189,248,0.18); }
     }
+    .fade-up { animation: fadeUp 0.7s ease-out both; }
+    .d1 { animation-delay: 0.08s; }
+    .d2 { animation-delay: 0.16s; }
+    .d3 { animation-delay: 0.24s; }
+    .d4 { animation-delay: 0.32s; }
+
+    /* ═══════ HERO ═══════ */
+    .hero { text-align: center; margin-bottom: 40px; }
+    .logo-wrap {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 88px; height: 88px;
+      background: rgba(56,189,248,0.04);
+      border: 1px solid rgba(56,189,248,0.12);
+      border-radius: 22px; margin-bottom: 24px;
+      animation: glow 4s ease-in-out infinite;
+    }
     .hero h1 {
-      font-size: 48px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 8px;
-      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      font-size: 48px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 10px;
+      background: linear-gradient(135deg, #38bdf8, #a78bfa);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .tagline { font-size: 18px; color: var(--text-sec); font-weight: 400; margin-bottom: 16px; }
-    .version-badge {
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--green);
-      background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.15);
-      padding: 5px 16px; border-radius: 6px; display: inline-block;
-      letter-spacing: 0.5px; font-weight: 600;
-    }
+    .tagline { font-size: 18px; color: var(--text-sec); font-weight: 400; }
 
     /* ═══════ DOCUMENT CARDS ═══════ */
-    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 48px; }
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 36px; }
     .card {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
-      padding: 36px 28px; text-decoration: none; color: inherit;
+      padding: 32px 26px; text-decoration: none; color: inherit;
       position: relative; overflow: hidden; transition: all 0.4s ease;
     }
     .card:hover {
@@ -89,22 +91,22 @@
     .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
     .card.debrief::before { background: linear-gradient(135deg, var(--blue), var(--purple)); }
     .card.manual::before { background: linear-gradient(135deg, var(--green), var(--cyan)); }
-    .card-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+    .card-icon { font-size: 32px; margin-bottom: 14px; display: block; }
     .card-label {
       font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
-      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px;
     }
     .card.debrief .card-label { color: var(--blue); }
     .card.manual .card-label { color: var(--green); }
-    .card-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; }
-    .card-desc { font-size: 14px; color: var(--text-sec); line-height: 1.6; margin-bottom: 20px; }
+    .card-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .card-desc { font-size: 13px; color: var(--text-sec); line-height: 1.6; margin-bottom: 16px; }
     .card-meta {
       display: flex; gap: 16px; font-family: 'JetBrains Mono', monospace;
       font-size: 11px; color: var(--text-muted);
     }
     .card-meta span { display: flex; align-items: center; gap: 4px; }
     .card-arrow {
-      position: absolute; bottom: 28px; right: 28px;
+      position: absolute; bottom: 26px; right: 26px;
       font-size: 20px; color: var(--text-muted); transition: all 0.3s;
     }
     .card:hover .card-arrow { transform: translateX(4px); }
@@ -112,108 +114,53 @@
     .card.manual:hover .card-arrow { color: var(--green); }
 
     /* ═══════ STATS ROW ═══════ */
-    .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 48px; }
+    .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 36px; }
     .stat {
       background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 20px 12px; text-align: center;
+      border-radius: 14px; padding: 16px 10px; text-align: center;
       transition: all 0.3s;
     }
     .stat:hover { border-color: var(--border-glow); transform: translateY(-2px); }
-    .stat-val { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .stat-val { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
     .stat-val.blue { color: var(--blue); }
     .stat-val.green { color: var(--green); }
     .stat-val.purple { color: var(--purple); }
     .stat-val.cyan { color: var(--cyan); }
     .stat-val.amber { color: var(--amber); }
-    .stat-label { font-size: 10px; color: var(--text-sec); font-weight: 500; letter-spacing: 0.3px; margin-top: 4px; }
-
-    /* ═══════ HIGHLIGHTS ═══════ */
-    .highlights {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
-      padding: 32px; margin-bottom: 24px;
-    }
-    .highlights-title {
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
-      color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
-    }
-    .highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .highlight-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.03);
-    }
-    .highlight-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-    .highlight-text { font-size: 13px; color: var(--text-sec); line-height: 1.5; }
-    .highlight-text strong { color: var(--text); }
-
-    /* ═══════ WHATS NEW ═══════ */
-    .whats-new {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
-      padding: 32px; margin-bottom: 48px;
-    }
-    .whats-new-title {
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
-      color: var(--amber); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
-    }
-    .change-list { list-style: none; }
-    .change-list li {
-      padding: 10px 14px; border-radius: 10px;
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03);
-      font-size: 13px; color: var(--text-sec); line-height: 1.5;
-      margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px;
-    }
-    .change-list li:last-child { margin-bottom: 0; }
-    .change-list .tag {
-      font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
-      padding: 2px 8px; border-radius: 4px; flex-shrink: 0; margin-top: 3px;
-      letter-spacing: 0.5px;
-    }
-    .tag-new { background: rgba(52,211,153,0.12); color: var(--green); }
-    .tag-fix { background: rgba(248,113,113,0.12); color: var(--red); }
-    .tag-perf { background: rgba(56,189,248,0.12); color: var(--blue); }
-    .tag-cost { background: rgba(251,191,36,0.12); color: var(--amber); }
+    .stat-label { font-size: 10px; color: var(--text-muted); margin-top: 3px; font-weight: 500; letter-spacing: 0.3px; }
 
     /* ═══════ FOOTER ═══════ */
-    .footer { text-align: center; }
-    .footer-brand { font-size: 15px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
-    .footer-links { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .footer { text-align: center; padding-top: 20px; border-top: 1px solid var(--border); }
+    .footer-links { font-size: 13px; margin-bottom: 10px; }
     .footer-links a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--cyan); text-decoration: underline; }
-    .footer-divider { margin: 0 10px; color: var(--text-muted); }
+    .footer-divider { color: var(--text-muted); margin: 0 10px; }
+    .footer-copy { font-size: 11px; color: var(--text-muted); }
     .footer-legal {
-      font-size: 10px; color: var(--text-muted); line-height: 1.7;
-      max-width: 600px; margin: 0 auto; padding: 24px 28px;
-      background: rgba(255,255,255,0.015); border: 1px solid var(--border); border-radius: 14px;
-      text-align: left;
+      max-width: 700px; margin: 16px auto 12px; padding: 16px 20px;
+      border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+      background: rgba(15,20,32,0.6); font-size: 10px; color: var(--text-muted);
+      line-height: 1.6; text-align: left;
     }
     .footer-legal strong { color: var(--text-sec); }
-    .footer-copy { margin-top: 20px; font-size: 11px; color: var(--text-muted); }
 
     /* ═══════ RESPONSIVE ═══════ */
     @media (max-width: 700px) {
-      body { padding: 32px 16px 32px; }
+      body { padding: 28px 16px; justify-content: flex-start; }
+      .hero { margin-bottom: 32px; }
       .hero h1 { font-size: 34px; }
       .tagline { font-size: 15px; }
-      .logo-wrap { width: 76px; height: 76px; border-radius: 18px; }
-      .logo-wrap svg { width: 48px; height: 48px; }
-      .cards { grid-template-columns: 1fr; gap: 14px; }
-      .card { padding: 28px 22px; border-radius: 16px; }
-      .card-title { font-size: 20px; }
-      .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-      .highlight-grid { grid-template-columns: 1fr; }
-      .highlights, .whats-new { padding: 24px 20px; }
+      .cards { grid-template-columns: 1fr; gap: 14px; margin-bottom: 28px; }
+      .card { padding: 26px 22px; }
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 28px; }
+      .stat-val { font-size: 20px; }
+      .logo-wrap { width: 72px; height: 72px; border-radius: 18px; }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
       .hero h1 { font-size: 28px; }
       .tagline { font-size: 14px; }
-      .logo-wrap { width: 64px; height: 64px; }
-      .logo-wrap svg { width: 40px; height: 40px; }
       .stats { grid-template-columns: repeat(2, 1fr); }
-      .stat { padding: 14px 10px; }
-      .stat-val { font-size: 20px; }
-      .card-desc { font-size: 13px; }
-      .footer-legal { padding: 18px 16px; font-size: 9px; }
-      .change-list li { flex-direction: column; gap: 6px; }
+      .card-title { font-size: 20px; }
     }
   </style>
 </head>
@@ -222,30 +169,29 @@
 <div class="container">
 
   <!-- ═══════ HERO ═══════ -->
-  <div class="hero">
+  <div class="hero fade-up">
     <div class="logo-wrap">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 768">
-        <path d="M632.854248,406.170227 C661.173645,434.409973 689.233398,462.416565 717.334534,490.381561 C721.818970,494.844360 726.399475,499.220306 731.103455,503.449707 C734.545044,506.544067 734.824463,509.200806 731.347229,512.570618 C723.691589,519.989563 716.259583,527.639587 708.749329,535.208252 C687.057495,557.068665 665.389282,578.952576 643.680176,600.795776 C610.345398,634.336670 576.985901,667.852844 543.633057,701.375732 C536.123108,708.923950 528.445618,716.313293 521.142700,724.056274 C517.452209,727.969177 515.015259,726.796753 511.809570,723.517029 C494.459045,705.765869 476.988861,688.131165 459.503937,670.511902 C411.629303,622.269348 363.745544,574.035828 315.826263,525.837646 C295.397034,505.289490 274.908081,484.800140 254.333832,464.397461 C252.115372,462.197540 252.628464,461.051514 254.523315,459.189362 C272.339203,441.680511 290.156342,424.171387 307.779572,406.469727 C310.515625,403.721527 311.995331,403.912964 314.546509,406.487335 C340.227661,432.402008 366.061310,458.165558 391.751495,484.071350 C432.215790,524.875305 472.656586,565.703064 512.938049,606.687195 C516.914978,610.733459 519.013428,608.654297 521.771545,605.843994 C547.673767,579.451660 573.598755,553.081665 599.521973,526.709900 C603.842407,522.314758 608.099731,517.852417 612.546448,513.588257 C616.114929,510.166290 616.408875,507.177277 612.750244,503.469513 C600.004761,490.553040 587.857605,477.048767 574.592529,464.640472 C573.887939,463.981415 573.274170,463.225220 572.706604,462.610046 C573.162109,460.231506 574.730469,458.904938 576.117432,457.506653 C592.894409,440.592346 609.695923,423.702393 626.491211,406.806244 C628.308350,404.978180 630.093445,402.921356 632.854248,406.170227 z"/>
-        <path d="M473.615356,245.397949 C495.629517,267.469208 517.369202,289.325409 539.229553,311.060211 C541.291321,313.110138 541.365845,314.408325 539.413147,316.358459 C521.371948,334.376007 503.350739,352.413696 485.371490,370.493042 C482.526031,373.354340 480.950867,370.952637 479.255615,369.237823 C467.541321,357.388275 455.925995,345.440430 444.166626,333.636017 C410.067963,299.406616 375.878143,265.268005 341.800720,231.017548 C322.531403,211.650360 303.421600,192.124496 284.221466,172.688370 C277.464172,165.848038 277.276398,166.006958 270.607391,172.785675 C249.107376,194.639435 227.499634,216.387222 205.934067,238.176514 C197.852478,246.341949 189.613113,254.359421 181.754654,262.734253 C177.371521,267.405365 177.498337,269.060211 182.063934,273.723419 C193.713165,285.621765 205.484253,297.403320 217.352539,309.083313 C221.937485,313.595490 222.130936,313.766998 217.440140,318.442688 C200.446777,335.381378 183.419754,352.286438 166.477982,369.276550 C163.935715,371.826080 162.069092,372.573700 159.107086,369.560089 C132.949402,342.946106 106.644745,316.476624 80.411964,289.936340 C74.675865,284.132996 69.181885,278.084900 63.327312,272.406311 C60.111858,269.287506 59.994888,267.003632 63.289101,263.781433 C74.840652,252.482407 86.179436,240.965378 97.568794,229.501083 C141.123291,185.660065 184.651291,141.792725 228.221207,97.967049 C243.248947,82.851082 258.420898,67.878220 273.407623,52.721966 C276.572296,49.521526 278.560944,49.039181 282.165649,52.690517 C319.025208,90.026871 356.127136,127.123878 393.127899,164.320999 C419.902710,191.237869 446.627136,218.204849 473.615356,245.397949 z"/>
-        <path d="M264.774902,716.199402 C244.857697,696.048157 225.218948,676.122559 205.489075,656.287598 C172.829010,623.453735 140.079514,590.708801 107.429985,557.864441 C92.518417,542.863892 77.828911,527.642029 62.867268,512.692200 C59.570320,509.397766 59.888466,507.241791 63.042786,504.101349 C88.073677,479.180481 112.974258,454.128723 137.905151,429.107483 C163.534210,403.385559 189.133591,377.634033 214.780731,351.930176 C237.842590,328.817352 260.969391,305.769226 284.032532,282.657684 C296.269073,270.395477 308.447174,258.074738 320.612427,245.741699 C322.805450,243.518402 324.456085,243.390884 326.806335,245.830124 C343.677704,263.340332 360.612335,280.791504 377.719421,298.070801 C380.757507,301.139526 380.394348,302.689484 377.462341,305.597321 C356.646515,326.241394 336.250977,347.311310 315.334991,367.851898 C272.415558,410.001068 230.394943,453.030975 188.554916,496.242462 C186.004944,498.876068 183.409515,501.466125 180.811691,504.052734 C177.766632,507.084656 177.716400,509.915924 180.848282,513.072937 C197.390167,529.747437 213.865585,546.488037 230.325424,563.243713 C241.413757,574.531372 252.414932,585.904785 263.504547,597.191223 C267.003632,600.752380 270.711792,604.107666 274.232422,607.648499 C276.841217,610.272278 279.106476,609.767761 281.483093,607.337891 C293.947968,594.593567 306.526367,581.958618 318.865021,569.093567 C321.411652,566.438232 322.954559,565.393738 326.014313,568.483032 C342.898468,585.529907 359.893250,602.469177 377.018250,619.273987 C380.490051,622.680847 380.189301,624.848511 376.853943,628.195435 C344.758911,660.401672 312.775391,692.719543 280.902100,725.145203 C277.880188,728.219482 276.053986,728.192627 273.393738,725.037354 C270.824890,721.990479 267.823669,719.308228 264.774902,716.199402 z"/>
-        <path d="M503.088623,383.090576 C534.422852,351.718811 565.519348,320.609558 596.591797,289.476379 C602.004333,284.053253 607.312378,278.525909 612.674377,273.052307 C616.639221,269.004883 617.066589,267.041473 613.060486,262.847107 C604.091187,253.456253 594.470947,244.682251 585.594543,235.208450 C565.426819,213.683395 543.438354,193.970200 523.440308,172.277695 C516.594360,164.851654 516.422058,165.171188 509.498474,172.181320 C497.558075,184.271072 485.455017,196.200287 473.533325,208.308258 C471.202637,210.675400 469.769745,210.500351 467.475281,208.175644 C450.390320,190.865601 433.208710,173.650162 415.951416,156.511765 C413.113312,153.693192 412.950012,151.933746 415.999084,148.892685 C435.104797,129.837234 454.429047,111.003059 473.242889,91.647575 C486.584747,77.921570 500.647552,64.887428 513.807983,50.967575 C515.907349,48.747128 516.998352,49.237011 518.952393,51.203129 C544.427490,76.835365 570.009766,102.361008 595.551819,127.926682 C628.510681,160.916138 661.456421,193.918610 694.410339,226.912949 C705.585876,238.102203 716.776917,249.276047 727.938171,260.479492 C729.228699,261.774902 730.304016,263.285461 731.600464,264.574158 C734.143188,267.101593 733.866455,269.136871 731.305054,271.690796 C714.326599,288.619812 697.487061,305.688171 680.588196,322.697083 C656.053650,347.391357 631.404175,371.977600 606.680664,396.475250 C569.640625,433.176971 533.497742,470.757874 496.545349,507.540802 C488.307251,515.741089 480.764832,524.638306 470.401764,533.017578 C463.460876,525.632385 456.627673,518.177673 449.588898,510.914581 C438.926697,499.906555 428.302948,488.849579 417.284302,478.205292 C413.713318,474.757561 413.810272,472.737518 417.137665,469.417297 C444.500885,442.112946 471.742065,414.686249 499.016632,387.293091 C500.309570,385.994537 501.568176,384.661804 503.088623,383.090576 z"/>
-      </svg>
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 768" class="hero-logo" style="width:56px;height:56px;" fill="#38bdf8" stroke="none">
+            <path d="M632.854248,406.170227 C661.173645,434.409973 689.233398,462.416565 717.334534,490.381561 C721.818970,494.844360 726.399475,499.220306 731.103455,503.449707 C734.545044,506.544067 734.824463,509.200806 731.347229,512.570618 C723.691589,519.989563 716.259583,527.639587 708.749329,535.208252 C687.057495,557.068665 665.389282,578.952576 643.680176,600.795776 C610.345398,634.336670 576.985901,667.852844 543.633057,701.375732 C536.123108,708.923950 528.445618,716.313293 521.142700,724.056274 C517.452209,727.969177 515.015259,726.796753 511.809570,723.517029 C494.459045,705.765869 476.988861,688.131165 459.503937,670.511902 C411.629303,622.269348 363.745544,574.035828 315.826263,525.837646 C295.397034,505.289490 274.908081,484.800140 254.333832,464.397461 C252.115372,462.197540 252.628464,461.051514 254.523315,459.189362 C272.339203,441.680511 290.156342,424.171387 307.779572,406.469727 C310.515625,403.721527 311.995331,403.912964 314.546509,406.487335 C340.227661,432.402008 366.061310,458.165558 391.751495,484.071350 C432.215790,524.875305 472.656586,565.703064 512.938049,606.687195 C516.914978,610.733459 519.013428,608.654297 521.771545,605.843994 C547.673767,579.451660 573.598755,553.081665 599.521973,526.709900 C603.842407,522.314758 608.099731,517.852417 612.546448,513.588257 C616.114929,510.166290 616.408875,507.177277 612.750244,503.469513 C600.004761,490.553040 587.857605,477.048767 574.592529,464.640472 C573.887939,463.981415 573.274170,463.225220 572.706604,462.610046 C573.162109,460.231506 574.730469,458.904938 576.117432,457.506653 C592.894409,440.592346 609.695923,423.702393 626.491211,406.806244 C628.308350,404.978180 630.093445,402.921356 632.854248,406.170227 z"/>
+            <path d="M473.615356,245.397949 C495.629517,267.469208 517.369202,289.325409 539.229553,311.060211 C541.291321,313.110138 541.365845,314.408325 539.413147,316.358459 C521.371948,334.376007 503.350739,352.413696 485.371490,370.493042 C482.526031,373.354340 480.950867,370.952637 479.255615,369.237823 C467.541321,357.388275 455.925995,345.440430 444.166626,333.636017 C410.067963,299.406616 375.878143,265.268005 341.800720,231.017548 C322.531403,211.650360 303.421600,192.124496 284.221466,172.688370 C277.464172,165.848038 277.276398,166.006958 270.607391,172.785675 C249.107376,194.639435 227.499634,216.387222 205.934067,238.176514 C197.852478,246.341949 189.613113,254.359421 181.754654,262.734253 C177.371521,267.405365 177.498337,269.060211 182.063934,273.723419 C193.713165,285.621765 205.484253,297.403320 217.352539,309.083313 C221.937485,313.595490 222.130936,313.766998 217.440140,318.442688 C200.446777,335.381378 183.419754,352.286438 166.477982,369.276550 C163.935715,371.826080 162.069092,372.573700 159.107086,369.560089 C132.949402,342.946106 106.644745,316.476624 80.411964,289.936340 C74.675865,284.132996 69.181885,278.084900 63.327312,272.406311 C60.111858,269.287506 59.994888,267.003632 63.289101,263.781433 C74.840652,252.482407 86.179436,240.965378 97.568794,229.501083 C141.123291,185.660065 184.651291,141.792725 228.221207,97.967049 C243.248947,82.851082 258.420898,67.878220 273.407623,52.721966 C276.572296,49.521526 278.560944,49.039181 282.165649,52.690517 C319.025208,90.026871 356.127136,127.123878 393.127899,164.320999 C419.902710,191.237869 446.627136,218.204849 473.615356,245.397949 z"/>
+            <path d="M264.774902,716.199402 C244.857697,696.048157 225.218948,676.122559 205.489075,656.287598 C172.829010,623.453735 140.079514,590.708801 107.429985,557.864441 C92.518417,542.863892 77.828911,527.642029 62.867268,512.692200 C59.570320,509.397766 59.888466,507.241791 63.042786,504.101349 C88.073677,479.180481 112.974258,454.128723 137.905151,429.107483 C163.534210,403.385559 189.133591,377.634033 214.780731,351.930176 C237.842590,328.817352 260.969391,305.769226 284.032532,282.657684 C296.269073,270.395477 308.447174,258.074738 320.612427,245.741699 C322.805450,243.518402 324.456085,243.390884 326.806335,245.830124 C343.677704,263.340332 360.612335,280.791504 377.719421,298.070801 C380.757507,301.139526 380.394348,302.689484 377.462341,305.597321 C356.646515,326.241394 336.250977,347.311310 315.334991,367.851898 C272.415558,410.001068 230.394943,453.030975 188.554916,496.242462 C186.004944,498.876068 183.409515,501.466125 180.811691,504.052734 C177.766632,507.084656 177.716400,509.915924 180.848282,513.072937 C197.390167,529.747437 213.865585,546.488037 230.325424,563.243713 C241.413757,574.531372 252.414932,585.904785 263.504547,597.191223 C267.003632,600.752380 270.711792,604.107666 274.232422,607.648499 C276.841217,610.272278 279.106476,609.767761 281.483093,607.337891 C293.947968,594.593567 306.526367,581.958618 318.865021,569.093567 C321.411652,566.438232 322.954559,565.393738 326.014313,568.483032 C342.898468,585.529907 359.893250,602.469177 377.018250,619.273987 C380.490051,622.680847 380.189301,624.848511 376.853943,628.195435 C344.758911,660.401672 312.775391,692.719543 280.902100,725.145203 C277.880188,728.219482 276.053986,728.192627 273.393738,725.037354 C270.824890,721.990479 267.823669,719.308228 264.774902,716.199402 z"/>
+            <path d="M503.088623,383.090576 C534.422852,351.718811 565.519348,320.609558 596.591797,289.476379 C602.004333,284.053253 607.312378,278.525909 612.674377,273.052307 C616.639221,269.004883 617.066589,267.041473 613.060486,262.847107 C604.091187,253.456253 594.470947,244.682251 585.594543,235.208450 C565.426819,213.683395 543.438354,193.970200 523.440308,172.277695 C516.594360,164.851654 516.422058,165.171188 509.498474,172.181320 C497.558075,184.271072 485.455017,196.200287 473.533325,208.308258 C471.202637,210.675400 469.769745,210.500351 467.475281,208.175644 C450.390320,190.865601 433.208710,173.650162 415.951416,156.511765 C413.113312,153.693192 412.950012,151.933746 415.999084,148.892685 C435.104797,129.837234 454.429047,111.003059 473.242889,91.647575 C486.584747,77.921570 500.647552,64.887428 513.807983,50.967575 C515.907349,48.747128 516.998352,49.237011 518.952393,51.203129 C544.427490,76.835365 570.009766,102.361008 595.551819,127.926682 C628.510681,160.916138 661.456421,193.918610 694.410339,226.912949 C705.585876,238.102203 716.776917,249.276047 727.938171,260.479492 C729.228699,261.774902 730.304016,263.285461 731.600464,264.574158 C734.143188,267.101593 733.866455,269.136871 731.305054,271.690796 C714.326599,288.619812 697.487061,305.688171 680.588196,322.697083 C656.053650,347.391357 631.404175,371.977600 606.680664,396.475250 C569.640625,433.176971 533.497742,470.757874 496.545349,507.540802 C488.307251,515.741089 480.764832,524.638306 470.401764,533.017578 C463.460876,525.632385 456.627673,518.177673 449.588898,510.914581 C438.926697,499.906555 428.302948,488.849579 417.284302,478.205292 C413.713318,474.7575615 413.810272,472.737518 417.137665,469.417297 C444.500885,442.112946 471.742065,414.686249 499.016632,387.293091 C500.309570,385.994537 501.568176,384.661804 503.088623,383.090576 z"/>
+          </svg>
     </div>
     <h1>Nexus Investing</h1>
-    <div class="tagline">AI-Powered Autonomous Trading System</div>
-    <div class="version-badge">V98.1 &bull; LIVE IRON CONDOR EXECUTION</div>
+    <div class="tagline">Autonomous AI-Powered Trading System</div>
   </div>
 
   <!-- ═══════ DOCUMENT CARDS ═══════ -->
-  <div class="cards">
+  <div class="cards fade-up d1">
     <a href="debrief.html" class="card debrief">
       <span class="card-icon">&#128202;</span>
       <div class="card-label">SYSTEM OVERVIEW</div>
       <div class="card-title">System Debrief</div>
-      <div class="card-desc">Visual deep-dive into the two-lane architecture, 8-agent AI council, APEX engine, live iron condor execution, walk-forward optimization, and IBKR TWS integration.</div>
+      <div class="card-desc">Visual deep-dive into the two-lane architecture, 8-agent AI council, 6 trading profiles, APEX elite engine, institutional analytics, and self-learning feedback loop.</div>
       <div class="card-meta">
         <span>&#9889; Interactive</span>
-        <span>&#9201; 12 min</span>
+        <span>&#9201; 12 min read</span>
       </div>
       <div class="card-arrow">&rarr;</div>
     </a>
@@ -253,110 +199,56 @@
       <span class="card-icon">&#128218;</span>
       <div class="card-label">TECHNICAL REFERENCE</div>
       <div class="card-title">User Manual</div>
-      <div class="card-desc">Complete 300+ page technical reference &mdash; 35 chapters, 7 appendices, multi-leg order mechanics, walk-forward validation, IBKR broker adapter, and full API documentation.</div>
+      <div class="card-desc">Complete technical reference covering all 6 profiles, multi-broker execution, risk management, backtesting framework, and full API documentation.</div>
       <div class="card-meta">
-        <span>&#128196; 300+ pages</span>
-        <span>&#9201; Full guide</span>
+        <span>&#128196; Full guide</span>
+        <span>&#9201; Reference</span>
       </div>
       <div class="card-arrow">&rarr;</div>
     </a>
   </div>
 
   <!-- ═══════ STATS ═══════ -->
-  <div class="stats">
+  <div class="stats fade-up d2">
     <div class="stat">
       <div class="stat-val blue">8</div>
       <div class="stat-label">AI Agents</div>
     </div>
     <div class="stat">
-      <div class="stat-val green">7</div>
-      <div class="stat-label">Strategies</div>
+      <div class="stat-val green">6</div>
+      <div class="stat-label">Trading Profiles</div>
     </div>
     <div class="stat">
       <div class="stat-val purple">5</div>
       <div class="stat-label">LLM Families</div>
     </div>
     <div class="stat">
-      <div class="stat-val amber">7/8</div>
-      <div class="stat-label">Winning Years</div>
+      <div class="stat-val amber">57&times;</div>
+      <div class="stat-label">Backtest Return</div>
     </div>
     <div class="stat">
-      <div class="stat-val cyan">+94.8%</div>
-      <div class="stat-label">Avg Return</div>
+      <div class="stat-val cyan">38K+</div>
+      <div class="stat-label">Backtests Run</div>
     </div>
-  </div>
-
-  <!-- ═══════ V98.1 HIGHLIGHTS ═══════ -->
-  <div class="highlights">
-    <div class="highlights-title">V98.1 Highlights</div>
-    <div class="highlight-grid">
-      <div class="highlight-item">
-        <span class="highlight-icon">&#128176;</span>
-        <div class="highlight-text"><strong>Live Iron Condor Execution</strong> &mdash; Alpaca multi-leg orders with automated 4-leg entry/exit. $728 credit received on first live session (SPY + QQQ).</div>
-      </div>
-      <div class="highlight-item">
-        <span class="highlight-icon">&#128202;</span>
-        <div class="highlight-text"><strong>Walk-Forward Optimization</strong> &mdash; +181% P&amp;L improvement via optimized delta (0.25), wing width (10pt), and Mon/Wed-only trading schedule.</div>
-      </div>
-      <div class="highlight-item">
-        <span class="highlight-icon">&#129504;</span>
-        <div class="highlight-text"><strong>IBKR TWS Broker</strong> &mdash; New IBKRTwsBroker adapter via ib_insync for Interactive Brokers Gateway. Real positions, real P&amp;L sync.</div>
-      </div>
-      <div class="highlight-item">
-        <span class="highlight-icon">&#128184;</span>
-        <div class="highlight-text"><strong>Credit Spreads</strong> &mdash; +$5,457 profit, 100% win rate. SMA-based directional premium selling with regime-adaptive positioning.</div>
-      </div>
-      <div class="highlight-item">
-        <span class="highlight-icon">&#128737;</span>
-        <div class="highlight-text"><strong>Trailing Stop Fix</strong> &mdash; Backtest-proven 0.5R activation / 0.5 ATR distance now correctly applied. Winners like RGTI get room to breathe.</div>
-      </div>
-      <div class="highlight-item">
-        <span class="highlight-icon">&#128181;</span>
-        <div class="highlight-text"><strong>Opus Auditor Removed</strong> &mdash; $374/year savings. The automated LLM monitor had -100% ROI with 0 opportunities found. Replaced by manual oversight.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════ WHAT'S NEW CHANGELOG ═══════ -->
-  <div class="whats-new">
-    <div class="whats-new-title">What Changed Since V96.1</div>
-    <ul class="change-list">
-      <li><span class="tag tag-new">NEW</span> <span>Alpaca multi-leg order integration for 4-leg Iron Condor entry/exit with OCC symbol format</span></li>
-      <li><span class="tag tag-new">NEW</span> <span>IBKRTwsBroker adapter &mdash; ib_insync TWS socket API for Interactive Brokers Gateway on port 4002</span></li>
-      <li><span class="tag tag-new">NEW</span> <span>Fully automated position management: profit targets, per-side stops, time stops, and hard exits</span></li>
-      <li><span class="tag tag-perf">PERF</span> <span>Walk-forward optimized IC parameters: delta 0.25, wing 10pt, DTE 7, Mon/Wed only &mdash; +181% improvement</span></li>
-      <li><span class="tag tag-perf">PERF</span> <span>Delta range widened 0.24&ndash;0.29 and spread tolerance relaxed to 20% for better option fills</span></li>
-      <li><span class="tag tag-fix">FIX</span> <span>Trailing stop config parameter names corrected &mdash; 0.5R activation / 0.5 ATR distance now applied correctly</span></li>
-      <li><span class="tag tag-fix">FIX</span> <span>IC exit orders now actually placed via broker (critical bug: exits were calculated but never submitted)</span></li>
-      <li><span class="tag tag-fix">FIX</span> <span>Aggressive profile missing execution_service parameter for PremiumSelling &mdash; IC orders now execute</span></li>
-      <li><span class="tag tag-fix">FIX</span> <span>Asyncio event loop fix for Streamlit ScriptRunner and autopilot threads (ib_insync compatibility)</span></li>
-      <li><span class="tag tag-cost">COST</span> <span>Opus 4.6 Auditor removed &mdash; $31.20/month savings with 0 detected opportunities</span></li>
-      <li><span class="tag tag-fix">FIX</span> <span>V94 dead trade time stop disabled for stocks (kept for 0DTE options where theta burn is critical)</span></li>
-    </ul>
   </div>
 
   <!-- ═══════ FOOTER ═══════ -->
-  <div class="footer">
-    <div class="footer-brand">Nexus Investing &bull; V98.1</div>
+  <div class="footer fade-up d3">
     <div class="footer-links">
-      <a href="mailto:lokindergill@gmail.com">lokindergill@gmail.com</a>
+      <a href="mailto:Lokindergill@gmail.com">Lokindergill@gmail.com</a>
       <span class="footer-divider">|</span>
       <a href="https://www.linkedin.com/in/lokindergill" target="_blank">linkedin.com/in/lokindergill</a>
     </div>
-
     <div class="footer-legal">
       <strong>Legal Disclosure &amp; Risk Acknowledgment</strong><br><br>
-      <strong>NATURE OF SERVICE:</strong> Nexus Investing is a technological research terminal utilizing probabilistic multi-agent modeling. The &ldquo;Finance Council,&rdquo; &ldquo;Alpha Hunter,&rdquo; and all associated data outputs are generated through an ensemble of Large Language Models (LLMs) and data-driven simulations. These outputs do not constitute financial advice, trading signals, or investment recommendations.<br><br>
-      <strong>NO PROFESSIONAL FIDUCIARY:</strong> Nexus Investing is not a registered investment advisor, broker-dealer, or financial institution. All comparative performance metrics and targets are theoretical design objectives based on back-tested logic and do not guarantee future returns.<br><br>
-      <strong>TECHNOLOGICAL &amp; EXECUTION RISK:</strong> The &ldquo;Autonomous Trading Pipeline&rdquo; involves significant risk of capital loss. Users acknowledge that algorithmic trading systems are subject to market volatility, API latency, and potential model reasoning errors. By accessing this documentation, you acknowledge these risks.
+      <strong>Nature of Service:</strong> Nexus Investing is a technological research platform utilizing probabilistic multi-agent modeling. The AI Council and all associated data outputs are generated through an ensemble of Large Language Models and data-driven simulations. These results are provided for informational and educational purposes only and do not constitute professional financial, investment, legal, or tax advice.<br><br>
+      <strong>No Professional Fiduciary:</strong> Nexus Investing is not a registered investment advisor, broker-dealer, or financial institution. All comparative performance metrics are theoretical design objectives based on backtested logic and do not guarantee future returns.<br><br>
+      <strong>Technological &amp; Execution Risk:</strong> Autonomous trading involves significant risk of capital loss. Users acknowledge that algorithmic systems are subject to market volatility, API latency, and potential model reasoning errors. You retain 100% responsibility for your own capital. Never invest capital you cannot afford to lose.
     </div>
-
-    <div class="footer-copy">
-      Copyright &copy; 2026 Nexus Investing. All Rights Reserved.<br>
-      <em>Confidential &amp; Proprietary Research Terminal. Unauthorized reproduction or distribution is strictly prohibited.</em>
-    </div>
+    <div class="footer-copy">Copyright &copy; 2026 Nexus Investing. All Rights Reserved.</div>
   </div>
 
 </div>
+
 </body>
 </html>
